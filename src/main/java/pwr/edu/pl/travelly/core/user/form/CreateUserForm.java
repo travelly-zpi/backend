@@ -1,0 +1,29 @@
+package pwr.edu.pl.travelly.core.user.form;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@NoArgsConstructor
+@Setter
+@Getter
+public class CreateUserForm {
+    private String userName;
+
+    private String email;
+
+    private String password;
+
+    private String firstName;
+
+    private String lastName;
+
+    private LocalDate dateOfBirth;
+
+    private String languages;
+
+    private String hobbies;
+}
