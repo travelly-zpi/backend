@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import pwr.edu.pl.travelly.persistence.common.AbstractEntity;
+import pwr.edu.pl.travelly.persistence.localisation.entity.Localisation;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -47,8 +49,15 @@ public class User extends AbstractEntity {
     @Column(name = "hobbies")
     private String hobbies;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinColumn(name = "localisation_id")
+    private Localisation localisation;
 
 }

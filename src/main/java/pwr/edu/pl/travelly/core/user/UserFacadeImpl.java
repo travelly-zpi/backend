@@ -13,10 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pwr.edu.pl.travelly.api.security.TokenProvider;
+import pwr.edu.pl.travelly.core.common.exception.ExistsException;
 import pwr.edu.pl.travelly.core.user.dto.AuthResponse;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
+import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
 
 import java.util.HashSet;
@@ -29,11 +31,14 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     private final BCryptPasswordEncoder bcryptEncoder;
     private final TokenProvider jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
+
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
 
     public UserFacadeImpl(final UserPort userPort,
-                          final BCryptPasswordEncoder bcryptEncoder, TokenProvider jwtTokenUtil, AuthenticationManager authenticationManager) {
+                          final BCryptPasswordEncoder bcryptEncoder,
+                          final TokenProvider jwtTokenUtil,
+                          final AuthenticationManager authenticationManager) {
         this.userPort = userPort;
         this.bcryptEncoder = bcryptEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -57,7 +62,10 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     @Override
     public UserDto save(final CreateUserForm user) {
         if(userPort.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email is already taken");
+            throw new ExistsException("Email is already taken");
+        }
+        if(userPort.existsByUserName(user.getUserName())){
+            throw new ExistsException("User name is already taken");
         }
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userPort.save(user);
@@ -68,7 +76,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         final UserDto user = this.userPort.findByUserName(loginUserForm.getUserName());
 
         if(falsePassword(loginUserForm.getPassword(),user.getPassword())) {
-            throw new IllegalArgumentException("FALSE_PASSWORD");
+            throw new IllegalArgumentException("False password");
         }
 
         final Authentication authentication = authenticationManager.
@@ -83,6 +91,17 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         final String token = jwtTokenUtil.generateToken(authentication);
 
         return new AuthResponse(token,this.TOKEN_VALIDITY,user);
+    }
+
+    @Override
+    public UserDto update(UpdateUserForm updateUserForm) {
+        if(userPort.existsByEmailAndUuidNot(updateUserForm.getEmail(), updateUserForm.getUuid())) {
+            throw new ExistsException("Email is already taken");
+        }
+        if(userPort.existsByUserNameAndUuidNot(updateUserForm.getUserName(), updateUserForm.getUuid())){
+            throw new ExistsException("User name is already taken");
+        }
+        return userPort.update(updateUserForm);
     }
 
     private boolean falsePassword(final CharSequence rawPassword, final String encodedPassword){
