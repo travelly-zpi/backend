@@ -2,6 +2,7 @@ package pwr.edu.pl.travelly.persistence.user.adapter;
 
 import org.springframework.stereotype.Component;
 import pwr.edu.pl.travelly.core.common.exception.NotFoundException;
+import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
@@ -34,9 +35,18 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
-    public UserDto findByUserName(final String userName) {
+    public LoggedUserDto findByUserName(final String userName) {
         final User user = userRepository
                 .findUserByUserName(userName)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return UserMapper.toLoggedUserDto(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDto findByUuid(final UUID uuid) {
+        final User user = userRepository
+                .findUserByUuid(uuid)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         return UserMapper.toDto(user);
     }
@@ -104,7 +114,7 @@ public class UserAdapter implements UserPort {
         user.setFirstName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());
-        user.setHobbies(updateUserForm.getHobbies());
+        user.setDescription(updateUserForm.getDescription());
         user.setDateOfBirth(updateUserForm.getDateOfBirth());
     }
 }

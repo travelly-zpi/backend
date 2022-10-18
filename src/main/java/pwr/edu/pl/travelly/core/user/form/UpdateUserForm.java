@@ -22,7 +22,7 @@ public class UpdateUserForm {
     private String lastName;
     private LocalDate dateOfBirth;
     private String languages;
-    private String hobbies;
+    private String description;
 
     private String country;
     private String city;

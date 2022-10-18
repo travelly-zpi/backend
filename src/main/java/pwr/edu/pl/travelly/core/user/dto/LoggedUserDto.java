@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pwr.edu.pl.travelly.core.localisation.dto.LocalisationDto;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -16,15 +14,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class LoggedUserDto {
     private UUID uuid;
     private String userName;
-    private String firstName;
-    private String lastName;
-    private LocalDate dateOfBirth;
-    private String languages;
-    private String description;
+    @JsonIgnore
+    private String password;
     @JsonIgnore
     private String role;
-    private LocalisationDto localisation;
 }

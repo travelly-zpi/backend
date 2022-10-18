@@ -43,8 +43,8 @@ public class User extends AbstractEntity {
     @Column(name = "languages")
     private String languages;
 
-    @Column(name = "hobbies")
-    private String hobbies;
+    @Column(name = "description")
+    private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")

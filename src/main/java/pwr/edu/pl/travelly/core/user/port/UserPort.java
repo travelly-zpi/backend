@@ -1,5 +1,6 @@
 package pwr.edu.pl.travelly.core.user.port;
 
+import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
@@ -10,7 +11,8 @@ public interface UserPort {
     UserDto save(final CreateUserForm createUserForm);
     UserDto update(final UpdateUserForm updateUserForm);
 
-    UserDto findByUserName(final String email);
+    LoggedUserDto findByUserName(final String email);
+    UserDto findByUuid(final UUID uuid);
 
     boolean existsByUserName(final String email);
     boolean existsByUserNameAndUuidNot(final String email, final UUID uuid);

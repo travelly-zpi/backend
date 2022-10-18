@@ -5,15 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pwr.edu.pl.travelly.core.user.UserFacade;
+import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
+
+import javax.validation.Valid;
+import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 
@@ -29,13 +34,19 @@ public class UserController{
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> generateToken(@RequestBody final LoginUserForm loginUserForm) throws AuthenticationException {
+    public ResponseEntity<?> generateToken(@RequestBody @Valid final LoginUserForm loginUserForm) throws AuthenticationException {
         return ResponseEntity.ok(this.userFacade.generateToken(loginUserForm));
     }
 
     @RequestMapping(value="/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody final CreateUserForm user){
-        return nonNull(userFacade.save(user)) ? ResponseEntity.ok(user) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> saveUser(@RequestBody @Valid final CreateUserForm user){
+        return nonNull(userFacade.save(user)) ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value="/{uuid}", method = RequestMethod.GET)
+    public ResponseEntity<?> findUser(@PathVariable final UUID uuid){
+        final UserDto user = userFacade.findByUuid(uuid);
+        return ResponseEntity.ok(user);
     }
 
     @RequestMapping(value="/hello_world", method = RequestMethod.GET)

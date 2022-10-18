@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import pwr.edu.pl.travelly.api.security.TokenProvider;
 import pwr.edu.pl.travelly.core.common.exception.ExistsException;
 import pwr.edu.pl.travelly.core.user.dto.AuthResponse;
+import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
@@ -22,6 +23,7 @@ import pwr.edu.pl.travelly.core.user.port.UserPort;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Service("userFacade")
 public class UserFacadeImpl implements UserFacade, UserDetailsService{
@@ -45,11 +47,11 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
-        final UserDto user = userPort.findByUserName(userName);
+        final LoggedUserDto user = userPort.findByUserName(userName);
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), getAuthority(user));
     }
 
-    private Set<SimpleGrantedAuthority> getAuthority(final UserDto user) {
+    private Set<SimpleGrantedAuthority> getAuthority(final LoggedUserDto user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
         return authorities;
@@ -58,18 +60,23 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     @Override
     public UserDto save(final CreateUserForm user) {
         if(userPort.existsByUserName(user.getEmail())) {
-            throw new ExistsException("Email is already taken");
+            throw new ExistsException("EMAIL_EXISTS");
         }
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userPort.save(user);
     }
 
     @Override
+    public UserDto findByUuid(final UUID uuid) {
+        return userPort.findByUuid(uuid);
+    }
+
+    @Override
     public AuthResponse generateToken(final LoginUserForm loginUserForm) {
-        final UserDto user = this.userPort.findByUserName(loginUserForm.getEmail());
+        final LoggedUserDto user = this.userPort.findByUserName(loginUserForm.getEmail());
 
         if(falsePassword(loginUserForm.getPassword(),user.getPassword())) {
-            throw new IllegalArgumentException("False password");
+            throw new IllegalArgumentException("FALSE_PASSWORD");
         }
 
         final Authentication authentication = authenticationManager.
@@ -89,7 +96,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     @Override
     public UserDto update(final UpdateUserForm updateUserForm) {
         if(userPort.existsByUserNameAndUuidNot(updateUserForm.getUserName(), updateUserForm.getUuid())) {
-            throw new ExistsException("Email is already taken");
+            throw new ExistsException("EMAIL_EXISTS");
         }
         return userPort.update(updateUserForm);
     }

@@ -1,5 +1,7 @@
 package pwr.edu.pl.travelly.persistence.user.entity;
 
+import lombok.extern.java.Log;
+import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.persistence.localisation.entity.LocalisationMapper;
@@ -17,6 +19,15 @@ public class UserMapper {
                 .build();
     }
 
+    public static LoggedUserDto toLoggedUserDto(final User user) {
+        return LoggedUserDto.builder()
+                .uuid(user.getUuid())
+                .password(user.getPassword())
+                .userName(user.getUserName())
+                .role(user.getRole().getName())
+                .build();
+    }
+
     public static UserDto toDto(final User user) {
         if(Objects.isNull(user.getLocalisation())){
             return toNewUserDto(user);
@@ -27,9 +38,8 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .dateOfBirth(user.getDateOfBirth())
-                .hobbies(user.getHobbies())
+                .description(user.getDescription())
                 .languages(user.getLanguages())
-                .password(user.getPassword())
                 .role(user.getRole().getName())
                 .localisation(user.getLocalisation() != null ? LocalisationMapper.toDto(user.getLocalisation()) : null)
                 .build();
@@ -42,9 +52,8 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .dateOfBirth(user.getDateOfBirth())
-                .hobbies(user.getHobbies())
+                .description(user.getDescription())
                 .languages(user.getLanguages())
-                .password(user.getPassword())
                 .role(user.getRole().getName())
                 .build();
     }
