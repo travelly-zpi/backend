@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class CreateUserForm {
-    private String userName;
 
     private String email;
 
@@ -17,7 +16,4 @@ public class CreateUserForm {
     private String firstName;
 
     private String lastName;
-
-    private String country;
-    private String city;
 }
