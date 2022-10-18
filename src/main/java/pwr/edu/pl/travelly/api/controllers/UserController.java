@@ -38,6 +38,11 @@ public class UserController{
         return nonNull(userFacade.save(user)) ? ResponseEntity.ok(user) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @RequestMapping(value="/hello_world", method = RequestMethod.GET)
+    public String helloWorld(){
+        return "HELLO_WORLD";
+    }
+
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody final UpdateUserForm userForm){
         return ResponseEntity.ok(userFacade.update(userForm));

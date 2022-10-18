@@ -1,7 +1,6 @@
 package pwr.edu.pl.travelly.core.user;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,9 +46,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
         final UserDto user = userPort.findByUserName(userName);
-        if(userPort.existsByEmail(userName)) {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), getAuthority(user));
     }
 
@@ -61,11 +57,8 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Override
     public UserDto save(final CreateUserForm user) {
-        if(userPort.existsByEmail(user.getEmail())) {
+        if(userPort.existsByUserName(user.getEmail())) {
             throw new ExistsException("Email is already taken");
-        }
-        if(userPort.existsByUserName(user.getUserName())){
-            throw new ExistsException("User name is already taken");
         }
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userPort.save(user);
@@ -73,7 +66,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Override
     public AuthResponse generateToken(final LoginUserForm loginUserForm) {
-        final UserDto user = this.userPort.findByUserName(loginUserForm.getUserName());
+        final UserDto user = this.userPort.findByUserName(loginUserForm.getEmail());
 
         if(falsePassword(loginUserForm.getPassword(),user.getPassword())) {
             throw new IllegalArgumentException("False password");
@@ -82,7 +75,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         final Authentication authentication = authenticationManager.
                 authenticate(
                         new UsernamePasswordAuthenticationToken(
-                                loginUserForm.getUserName(),
+                                loginUserForm.getEmail(),
                                 loginUserForm.getPassword()
                         )
                 );
@@ -94,12 +87,9 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
-    public UserDto update(UpdateUserForm updateUserForm) {
-        if(userPort.existsByEmailAndUuidNot(updateUserForm.getEmail(), updateUserForm.getUuid())) {
+    public UserDto update(final UpdateUserForm updateUserForm) {
+        if(userPort.existsByUserNameAndUuidNot(updateUserForm.getUserName(), updateUserForm.getUuid())) {
             throw new ExistsException("Email is already taken");
-        }
-        if(userPort.existsByUserNameAndUuidNot(updateUserForm.getUserName(), updateUserForm.getUuid())){
-            throw new ExistsException("User name is already taken");
         }
         return userPort.update(updateUserForm);
     }
