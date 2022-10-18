@@ -14,5 +14,4 @@ public interface UserPort {
 
     boolean existsByUserName(final String email);
     boolean existsByUserNameAndUuidNot(final String email, final UUID uuid);
-
 }

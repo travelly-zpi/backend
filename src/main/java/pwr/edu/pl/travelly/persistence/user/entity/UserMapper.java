@@ -31,7 +31,7 @@ public class UserMapper {
                 .languages(user.getLanguages())
                 .password(user.getPassword())
                 .role(user.getRole().getName())
-                .localisation(LocalisationMapper.toDto(user.getLocalisation()))
+                .localisation(user.getLocalisation() != null ? LocalisationMapper.toDto(user.getLocalisation()) : null)
                 .build();
     }
 
