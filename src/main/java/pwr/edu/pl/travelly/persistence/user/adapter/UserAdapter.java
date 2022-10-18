@@ -15,7 +15,6 @@ import pwr.edu.pl.travelly.persistence.user.repository.RoleRepository;
 import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -35,32 +34,11 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
-    public boolean existsByEmail(final String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    @Transactional
     public UserDto findByUserName(final String userName) {
         final User user = userRepository
                 .findUserByUserName(userName)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         return UserMapper.toDto(user);
-    }
-
-    @Override
-    @Transactional
-    public UserDto findByEmail(final String email) {
-        final User user = userRepository
-                .findUserByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-        return UserMapper.toDto(user);
-    }
-
-    @Override
-    @Transactional
-    public boolean existsByUuid(final UUID uuid) {
-        return userRepository.existsByUuid(uuid);
     }
 
     @Override
@@ -71,13 +49,7 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
-    public boolean existsByEmailAndUuidNot(final String email, final UUID uuid) {
-        return userRepository.existsByEmailAndUuidNot(email, uuid);
-    }
-
-    @Override
-    @Transactional
-    public boolean existsByUserNameAndUuidNot(final String userName, final UUID uuid) {
+    public boolean existsByUserNameAndUuidNot(final String userName,final UUID uuid) {
         return userRepository.existsByUserNameAndUuidNot(userName, uuid);
     }
 
@@ -93,9 +65,6 @@ public class UserAdapter implements UserPort {
 
     private void fetchNewUserDependencies(final User user, final CreateUserForm registerUserForm) {
         user.setRole(fetchRoleDependency());
-        String email = user.getEmail();
-        int index = email.indexOf('@');
-        user.setUserName(email.substring(0,index));    //set username as email before @
     }
 
     private void fetchUpdateUserDependencies(final User user, final UpdateUserForm updateUserForm) {
@@ -131,7 +100,7 @@ public class UserAdapter implements UserPort {
     }
 
     private void copyFromUpdateToEntity(final UpdateUserForm updateUserForm, final User user) {
-        user.setEmail(updateUserForm.getEmail());
+        user.setUserName(updateUserForm.getUserName());
         user.setFirstName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());
