@@ -7,7 +7,8 @@ import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import java.util.UUID;
 
 public interface UserPort {
-    UserDto findByUserName(final String userName);
+    UserDto findByUserName(final String email);
+    UserDto findByEmail(final String email);
     UserDto save(final CreateUserForm createUserForm);
     UserDto update(final UpdateUserForm updateUserForm);
 

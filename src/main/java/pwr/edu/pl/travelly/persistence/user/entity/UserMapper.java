@@ -10,7 +10,6 @@ public class UserMapper {
 
     public static User toEntity(final CreateUserForm registerUserForm) {
         return new User().toBuilder()
-                .userName(registerUserForm.getUserName())
                 .email(registerUserForm.getEmail())
                 .password(registerUserForm.getPassword())
                 .firstName(registerUserForm.getFirstName())
@@ -30,7 +29,7 @@ public class UserMapper {
                 .languages(user.getLanguages())
                 .password(user.getPassword())
                 .role(user.getRole().getName())
-                .localisation(LocalisationMapper.toDto(user.getLocalisation()))
+                .localisation(user.getLocalisation() != null ? LocalisationMapper.toDto(user.getLocalisation()) : null)
                 .build();
     }
 }

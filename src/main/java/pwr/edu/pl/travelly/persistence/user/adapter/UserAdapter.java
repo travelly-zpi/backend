@@ -50,6 +50,15 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
+    public UserDto findByEmail(final String email) {
+        final User user = userRepository
+                .findUserByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return UserMapper.toDto(user);
+    }
+
+    @Override
+    @Transactional
     public boolean existsByUuid(final UUID uuid) {
         return userRepository.existsByUuid(uuid);
     }
@@ -84,9 +93,9 @@ public class UserAdapter implements UserPort {
 
     private void fetchNewUserDependencies(final User user, final CreateUserForm registerUserForm) {
         user.setRole(fetchRoleDependency());
-        if(Objects.nonNull(registerUserForm.getCountry()) && Objects.nonNull(registerUserForm.getCity())) {
-            user.setLocalisation(fetchLocalisationDependency(registerUserForm.getCountry(), registerUserForm.getCity()));
-        }
+        String email = user.getEmail();
+        int index = email.indexOf('@');
+        user.setUserName(email.substring(0,index));    //set username as email before @
     }
 
     private void fetchUpdateUserDependencies(final User user, final UpdateUserForm updateUserForm) {

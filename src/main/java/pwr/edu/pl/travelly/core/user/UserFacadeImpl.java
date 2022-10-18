@@ -45,8 +45,9 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         this.authenticationManager = authenticationManager;
     }
 
+    //change to email
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
-        final UserDto user = userPort.findByUserName(userName);
+        final UserDto user = userPort.findByUserName(userName);    //change to email
         if(userPort.existsByEmail(userName)) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
@@ -63,9 +64,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     public UserDto save(final CreateUserForm user) {
         if(userPort.existsByEmail(user.getEmail())) {
             throw new ExistsException("Email is already taken");
-        }
-        if(userPort.existsByUserName(user.getUserName())){
-            throw new ExistsException("User name is already taken");
         }
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userPort.save(user);
