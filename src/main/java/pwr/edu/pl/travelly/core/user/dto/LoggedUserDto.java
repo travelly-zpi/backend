@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LoggedUserDto {
     private UUID uuid;
-    private String userName;
+    private String email;
     @JsonIgnore
     private String password;
     @JsonIgnore

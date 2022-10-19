@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.persistence.user.entity;
 
-import lombok.extern.java.Log;
 import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
@@ -23,7 +22,7 @@ public class UserMapper {
         return LoggedUserDto.builder()
                 .uuid(user.getUuid())
                 .password(user.getPassword())
-                .userName(user.getUserName())
+                .email(user.getUserName())
                 .role(user.getRole().getName())
                 .build();
     }
