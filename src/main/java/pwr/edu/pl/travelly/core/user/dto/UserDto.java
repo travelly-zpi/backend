@@ -1,6 +1,7 @@
 package pwr.edu.pl.travelly.core.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserDto {
     private UUID uuid;
+    @JsonProperty("email")
     private String userName;
     private String firstName;
     private String lastName;
