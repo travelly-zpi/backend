@@ -48,7 +48,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
         final LoggedUserDto user = userPort.findByUserName(userName);
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), getAuthority(user));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(final LoggedUserDto user) {
