@@ -1,20 +1,17 @@
 package pwr.edu.pl.travelly.api.controllers;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pwr.edu.pl.travelly.core.user.UserFacade;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
-import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
+import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 
 import javax.validation.Valid;
@@ -57,6 +54,21 @@ public class UserController{
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody final UpdateUserForm userForm){
         return ResponseEntity.ok(userFacade.update(userForm));
+    }
+
+    @RequestMapping(value="/register/verify", method = RequestMethod.GET)
+    public ResponseEntity<?> verifyCustomer(@RequestParam(required = false) String token){
+        if(StringUtils.isEmpty(token)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            userFacade.verifyUser(token);
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.badRequest().body("EXPIRED_TOKEN");
+        } catch (JwtException e) {
+            return ResponseEntity.badRequest().body("INVALID_TOKEN");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
