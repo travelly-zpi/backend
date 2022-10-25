@@ -1,8 +1,5 @@
 package pwr.edu.pl.travelly.api.controllers;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,17 +55,13 @@ public class UserController{
 
     @RequestMapping(value="/register/verify", method = RequestMethod.GET)
     public ResponseEntity<?> verifyCustomer(@RequestParam(required = false) String token){
-        if(StringUtils.isEmpty(token)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        try {
-            userFacade.verifyUser(token);
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.badRequest().body("EXPIRED_TOKEN");
-        } catch (JwtException e) {
-            return ResponseEntity.badRequest().body("INVALID_TOKEN");
-        }
+        userFacade.verifyUser(token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="register/verify", method = RequestMethod.POST)
+    public ResponseEntity<?> resendVerification(@RequestBody @Valid final LoginUserForm loginUserForm){
+        userFacade.resendVerification(loginUserForm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

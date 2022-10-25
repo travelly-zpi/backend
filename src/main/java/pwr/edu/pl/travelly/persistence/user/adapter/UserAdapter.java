@@ -53,6 +53,15 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
+    public UserDto findByEmail(final String email) {
+        final User user = userRepository
+                .findUserByUserName(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return UserMapper.toDto(user);
+    }
+
+    @Override
+    @Transactional
     public boolean existsByUserName(final String userName) {
         return userRepository.existsByUserName(userName);
     }

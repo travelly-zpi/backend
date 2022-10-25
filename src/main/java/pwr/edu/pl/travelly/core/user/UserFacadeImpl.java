@@ -1,5 +1,8 @@
 package pwr.edu.pl.travelly.core.user;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +28,6 @@ import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -76,11 +78,9 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         UserDto userDto = userPort.save(user);
         sendRegistrationConfirmationEmail(userDto, user.getEmail(), password);
         return userDto;
-        //return userPort.save(user);
     }
 
     private void sendRegistrationConfirmationEmail(UserDto user, String email, String password) {
-        // create token
         final Authentication authentication = authenticationManager.
                 authenticate(new UsernamePasswordAuthenticationToken(email, password));
         final String token = jwtTokenUtil.generateToken(authentication);
@@ -97,14 +97,23 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
-    public boolean verifyUser(String token) {
-        String userName = jwtTokenUtil.getUsernameFromToken(token);
-        if (Objects.isNull(userName))
+    public void verifyUser(String token) {
+        if(StringUtils.isEmpty(token)){ throw new IllegalArgumentException("EMPTY_TOKEN"); }
+        try {
+            String userName = jwtTokenUtil.getUsernameFromToken(token);
+            if (!userPort.existsByUserName(userName)) return;
+            userPort.enableUser(userName);
+        } catch (ExpiredJwtException e) {
+            throw new IllegalArgumentException("EXPIRED_TOKEN");
+        } catch (JwtException e) {
             throw new IllegalArgumentException("INVALID_TOKEN");
-        if (!userPort.existsByUserName(userName)) return false;
+        }
+    }
 
-        userPort.enableUser(userName);
-        return true;
+    @Override
+    public void resendVerification(final LoginUserForm loginUserForm) {
+        String email = loginUserForm.getEmail();
+        sendRegistrationConfirmationEmail(userPort.findByEmail(email), email, loginUserForm.getPassword());
     }
 
     @Override
@@ -121,7 +130,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         }
 
         if (!user.getEnable()) { throw new IllegalArgumentException("NOT_ACTIVATED"); }
-        // check if user is active then return token if not send message about account activation (resend email option?)
 
         final Authentication authentication = authenticationManager.
                 authenticate(

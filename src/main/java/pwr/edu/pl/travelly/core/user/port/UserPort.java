@@ -12,6 +12,7 @@ public interface UserPort {
     UserDto update(final UpdateUserForm updateUserForm);
     LoggedUserDto findByUserName(final String email);
     UserDto findByUuid(final UUID uuid);
+    UserDto findByEmail(final String email);
 
     boolean existsByUserName(final String email);
     boolean existsByUserNameAndUuidNot(final String email, final UUID uuid);
