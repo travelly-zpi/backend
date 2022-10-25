@@ -57,4 +57,6 @@ public class User extends AbstractEntity {
     @JoinColumn(name = "localisation_id")
     private Localisation localisation;
 
+    @Column(name = "enable")
+    private Boolean enable;
 }

@@ -4,17 +4,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pwr.edu.pl.travelly.core.user.UserFacade;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
-import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
+import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 
 import javax.validation.Valid;
@@ -59,4 +53,15 @@ public class UserController{
         return ResponseEntity.ok(userFacade.update(userForm));
     }
 
+    @RequestMapping(value="/register/verify", method = RequestMethod.GET)
+    public ResponseEntity<?> verifyCustomer(@RequestParam(required = false) String token){
+        userFacade.verifyUser(token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="register/verify", method = RequestMethod.POST)
+    public ResponseEntity<?> resendVerification(@RequestBody @Valid final LoginUserForm loginUserForm){
+        userFacade.resendVerification(loginUserForm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
