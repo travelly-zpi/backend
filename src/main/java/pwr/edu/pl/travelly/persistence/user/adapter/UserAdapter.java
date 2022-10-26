@@ -16,6 +16,8 @@ import pwr.edu.pl.travelly.persistence.user.repository.RoleRepository;
 import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -86,54 +88,36 @@ public class UserAdapter implements UserPort {
     public UserDto save(final CreateUserForm registerUserForm) {
         final User user = UserMapper.toEntity(registerUserForm);
         user.setUuid(UUID.randomUUID());
+        fetchNewUserDependencies(user);
         user.setEnable(false);  //  set enable to false to new user
-        fetchNewUserDependencies(user, registerUserForm);
         final User newUser = userRepository.save(user);
         return UserMapper.toDto(newUser);
     }
 
-    private void fetchNewUserDependencies(final User user, final CreateUserForm registerUserForm) {
+    private void fetchNewUserDependencies(final User user) {
         user.setRole(fetchRoleDependency());
-    }
-
-    private void fetchUpdateUserDependencies(final User user, final UpdateUserForm updateUserForm) {
-        user.setRole(fetchRoleDependency());
-        user.setLocalisation(fetchLocalisationDependency(updateUserForm.getCountry(), updateUserForm.getCity()));
     }
 
     private Role fetchRoleDependency() {
         return roleRepository.findById(2L).orElse(null);
     }
 
-    private Localisation fetchLocalisationDependency(final String country, final String city) {
-        if(localisationRepository.existsByCountryAndCity(country, city)) {
-            return localisationRepository.findLocalisationByCountryAndCity(country, city);
-        }else {
-            return Localisation.builder()
-                    .country(country)
-                    .city(city)
-                    .build();
-
-        }
-    }
-
     @Override
     @Transactional
-    public UserDto update(final UpdateUserForm updateUserForm) {
-        final User user = userRepository.findUserByUuid(updateUserForm.getUuid())
+    public UserDto update(final UpdateUserForm updateUserForm) throws IOException {
+        final User user = userRepository.findUserByUuid(UUID.fromString("cd191c04-2844-4145-90cc-c85b635ef43b"))
                 .orElseThrow(() -> new NotFoundException("User not found"));
         copyFromUpdateToEntity(updateUserForm, user);
-        fetchUpdateUserDependencies(user, updateUserForm);
         final User newUser = userRepository.save(user);
         return UserMapper.toDto(newUser);
     }
 
     private void copyFromUpdateToEntity(final UpdateUserForm updateUserForm, final User user) {
-        user.setUserName(updateUserForm.getUserName());
-        user.setFirstName(updateUserForm.getFirstName());
+        user.setUserName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());
         user.setDescription(updateUserForm.getDescription());
         user.setDateOfBirth(updateUserForm.getDateOfBirth());
+        user.setLocalisation(updateUserForm.getLocalisation());
     }
 }

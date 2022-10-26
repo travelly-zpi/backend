@@ -1,5 +1,9 @@
 package pwr.edu.pl.travelly.core.user;
 
+import com.azure.core.util.BinaryData;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import javax.mail.MessagingException;
 import pwr.edu.pl.travelly.api.email.context.AccountVerificationEmailContext;
 import pwr.edu.pl.travelly.api.security.TokenProvider;
@@ -27,7 +32,13 @@ import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,6 +50,11 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     private final TokenProvider jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+
+    private final String AZURE_CONNECTION = "AccountName=travelly;" +
+            "AccountKey=GdmI12VBEQ8CzuVV9ezLbkXX2NYosROQnvz40eKXvU9e6AUa6eRFdsKkIkwhYYzYrhRK/HYGBJEB+AStxFhdwg==;" +
+            "EndpointSuffix=core.windows.net;" +
+            "DefaultEndpointsProtocol=https;";
 
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
@@ -145,11 +161,26 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
-    public UserDto update(final UpdateUserForm updateUserForm) {
-        if(userPort.existsByUserNameAndUuidNot(updateUserForm.getUserName(), updateUserForm.getUuid())) {
+    public UserDto update(final UpdateUserForm updateUserForm) throws IOException {
+        if (userPort.existsByUserNameAndUuidNot(updateUserForm.getEmail(), updateUserForm.getUuid())) {
             throw new ExistsException("EMAIL_EXISTS");
         }
+
+        if(Objects.nonNull(updateUserForm.getImage())) {
+          uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
+        }
+
         return userPort.update(updateUserForm);
+    }
+
+    private void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
+        BlobContainerClient containerClient = new BlobContainerClientBuilder()
+                .connectionString(AZURE_CONNECTION)
+                .containerName("images")
+                .buildClient();
+
+        BlobClient blob = containerClient.getBlobClient(userUuid.toString());
+        blob.upload(image.getInputStream(), image.getSize(), true);
     }
 
     private boolean falsePassword(final CharSequence rawPassword, final String encodedPassword){

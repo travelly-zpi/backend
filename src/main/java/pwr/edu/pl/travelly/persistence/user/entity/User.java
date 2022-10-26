@@ -7,14 +7,18 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import pwr.edu.pl.travelly.persistence.common.AbstractEntity;
 import pwr.edu.pl.travelly.persistence.localisation.entity.Localisation;
+import pwr.edu.pl.travelly.persistence.post.entity.Post;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,16 +50,18 @@ public class User extends AbstractEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image")
+    private String image;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinColumn(name = "localisation_id")
-    private Localisation localisation;
+    @Column(name = "localisation")
+    private String localisation;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Post> posts;
 
     @Column(name = "enable")
     private Boolean enable;

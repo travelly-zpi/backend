@@ -69,6 +69,22 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<ExceptionResponse> exceptionBind(org.springframework.validation.BindException exc){
+        BindingResult result = exc.getBindingResult();
+        List<FieldError> fieldErrors = result.getFieldErrors();
+
+        String errorMessage = fieldErrors.stream().
+                map(DefaultMessageSourceResolvable::getDefaultMessage).
+                collect(Collectors.joining(", "));
+
+        ExceptionResponse error = new ExceptionResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                errorMessage,
+                System.currentTimeMillis());
+        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<ExceptionResponse> exception(Exception exc){
         ExceptionResponse error = new ExceptionResponse(
                 HttpStatus.BAD_REQUEST.value(),

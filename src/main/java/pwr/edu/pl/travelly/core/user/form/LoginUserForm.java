@@ -18,6 +18,6 @@ public class LoginUserForm {
     private String email;
 
     @NotBlank(message = "BLANK_PASSWORD")
-    @Size(min = 8, max = 50, message = "SIZE_PASSWORD")
+    @Size(min = 3, max = 50, message = "SIZE_PASSWORD")
     private String password;
 }

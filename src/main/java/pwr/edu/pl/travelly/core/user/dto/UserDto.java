@@ -28,5 +28,5 @@ public class UserDto {
     private String description;
     @JsonIgnore
     private String role;
-    private LocalisationDto localisation;
+    private String localisation;
 }
