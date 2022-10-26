@@ -14,4 +14,6 @@ public interface UserFacade {
     UserDto findByUuid(final UUID uuid);
     AuthResponse generateToken(final LoginUserForm loginUserForm);
     UserDto update(final UpdateUserForm updateUserForm) throws IOException;
+    void verifyUser(String token);
+    void resendVerification(final LoginUserForm loginUserForm);
 }

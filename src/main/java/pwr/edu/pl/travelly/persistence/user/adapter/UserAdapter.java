@@ -55,6 +55,15 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
+    public UserDto findByEmail(final String email) {
+        final User user = userRepository
+                .findUserByUserName(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return UserMapper.toDto(user);
+    }
+
+    @Override
+    @Transactional
     public boolean existsByUserName(final String userName) {
         return userRepository.existsByUserName(userName);
     }
@@ -67,10 +76,20 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
+    public void enableUser(String userName) {
+        final User user = userRepository.findUserByUserName(userName)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setEnable(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
     public UserDto save(final CreateUserForm registerUserForm) {
         final User user = UserMapper.toEntity(registerUserForm);
         user.setUuid(UUID.randomUUID());
         fetchNewUserDependencies(user);
+        user.setEnable(false);  //  set enable to false to new user
         final User newUser = userRepository.save(user);
         return UserMapper.toDto(newUser);
     }

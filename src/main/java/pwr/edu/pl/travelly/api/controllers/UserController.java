@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pwr.edu.pl.travelly.core.user.UserFacade;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
-import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
+import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 
 import javax.validation.Valid;
@@ -62,4 +62,15 @@ public class UserController {
         return ResponseEntity.ok(userFacade.update(userForm));
     }
 
+    @RequestMapping(value="/register/verify", method = RequestMethod.GET)
+    public ResponseEntity<?> verifyCustomer(@RequestParam(required = false) String token){
+        userFacade.verifyUser(token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="register/verify", method = RequestMethod.POST)
+    public ResponseEntity<?> resendVerification(@RequestBody @Valid final LoginUserForm loginUserForm){
+        userFacade.resendVerification(loginUserForm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
