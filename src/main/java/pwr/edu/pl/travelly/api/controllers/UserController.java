@@ -1,10 +1,12 @@
 package pwr.edu.pl.travelly.api.controllers;
 
+import com.azure.storage.blob.models.BlobProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 
 import static java.util.Objects.nonNull;
@@ -25,7 +28,7 @@ import static java.util.Objects.nonNull;
 @RestController
 @CrossOrigin(maxAge = 3600)
 @RequestMapping("/user")
-public class UserController{
+public class UserController {
 
     private final UserFacade userFacade;
 
@@ -55,7 +58,7 @@ public class UserController{
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody final UpdateUserForm userForm){
+    public ResponseEntity<?> updateUser(@ModelAttribute @Valid final UpdateUserForm userForm) throws IOException {
         return ResponseEntity.ok(userFacade.update(userForm));
     }
 
