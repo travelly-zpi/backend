@@ -21,4 +21,6 @@ public class LoggedUserDto {
     private String password;
     @JsonIgnore
     private String role;
+    @JsonIgnore
+    private Boolean enable;
 }

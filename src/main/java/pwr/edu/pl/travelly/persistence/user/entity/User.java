@@ -63,4 +63,6 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
 
+    @Column(name = "enable")
+    private Boolean enable;
 }
