@@ -17,6 +17,8 @@ import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -94,11 +96,12 @@ public class UserAdapter implements UserPort {
     }
 
     private void copyFromUpdateToEntity(final UpdateUserForm updateUserForm, final User user) {
+
         user.setUserName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());
         user.setDescription(updateUserForm.getDescription());
-        user.setDateOfBirth(updateUserForm.getDateOfBirth());
+        user.setDateOfBirth(LocalDate.parse(updateUserForm.getDateOfBirth()));
         user.setLocalisation(updateUserForm.getLocalisation());
     }
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
@@ -36,7 +37,7 @@ public class UpdateUserForm {
     private String lastName;
 
     private String password;
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
     private String languages;
     private String description;
     private MultipartFile image;
