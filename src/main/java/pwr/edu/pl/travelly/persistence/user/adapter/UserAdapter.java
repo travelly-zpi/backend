@@ -7,7 +7,6 @@ import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
-import pwr.edu.pl.travelly.persistence.localisation.entity.Localisation;
 import pwr.edu.pl.travelly.persistence.localisation.repository.LocalisationRepository;
 import pwr.edu.pl.travelly.persistence.user.entity.Role;
 import pwr.edu.pl.travelly.persistence.user.entity.User;
@@ -16,10 +15,7 @@ import pwr.edu.pl.travelly.persistence.user.repository.RoleRepository;
 import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -27,14 +23,11 @@ public class UserAdapter implements UserPort {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final LocalisationRepository localisationRepository;
 
     public UserAdapter(final UserRepository userRepository,
-                       final RoleRepository roleRepository,
-                       final LocalisationRepository localisationRepository){
+                       final RoleRepository roleRepository){
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.localisationRepository = localisationRepository;
     }
 
     @Override
@@ -106,8 +99,8 @@ public class UserAdapter implements UserPort {
 
     @Override
     @Transactional
-    public UserDto update(final UpdateUserForm updateUserForm) throws IOException {
-        final User user = userRepository.findUserByUuid(UUID.fromString("cd191c04-2844-4145-90cc-c85b635ef43b"))
+    public UserDto update(final UpdateUserForm updateUserForm) {
+        final User user = userRepository.findUserByUuid(updateUserForm.getUuid())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         copyFromUpdateToEntity(updateUserForm, user);
         final User newUser = userRepository.save(user);

@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.api.controllers;
 
-import com.azure.storage.blob.models.BlobProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,11 +50,6 @@ public class UserController {
     public ResponseEntity<?> findUser(@PathVariable final UUID uuid){
         final UserDto user = userFacade.findByUuid(uuid);
         return ResponseEntity.ok(user);
-    }
-
-    @RequestMapping(value="/hello_world", method = RequestMethod.GET)
-    public String helloWorld(){
-        return "HELLO_WORLD";
     }
 
     @PutMapping
