@@ -53,8 +53,11 @@ public class Post extends AbstractEntity {
     @Column(name = "participants")
     private int participants;
 
-    @Column(name = "localisation")
-    private String localisation;
+    @Column(name = "start_point")
+    private String startPoint;
+
+    @Column(name = "end_point")
+    private String endPoint;
 
     @Builder.Default
     @OneToMany(

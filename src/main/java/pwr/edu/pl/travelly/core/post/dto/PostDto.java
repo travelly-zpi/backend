@@ -25,7 +25,8 @@ public class PostDto {
     private LocalDate activeTo;
     private String type;
     private int participants;
-    private String localisation;
+    private String startPoint;
+    private String endPoint;
     private PostAuthorDto postAuthorDto;
     private String profileImageUrl;
     private List<String> imagesUrls;

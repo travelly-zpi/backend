@@ -55,6 +55,11 @@ public class PostAdapter implements PostPort {
     }
 
     @Override
+    public long count(final PostFilterForm filterForm) {
+        return postRepository.count(new PostSpecification(filterForm));
+    }
+
+    @Override
     @Transactional
     public PostDto findByUuid(final UUID uuid) {
         final Post post = postRepository.findByUuid(uuid)
