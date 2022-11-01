@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import net.bytebuddy.asm.Advice;
 import org.springframework.data.jpa.domain.Specification;
 import pwr.edu.pl.travelly.core.post.form.PostFilterForm;
+import pwr.edu.pl.travelly.persistence.common.AbstractEntity;
 import pwr.edu.pl.travelly.persistence.common.SpecificationUtils;
 import pwr.edu.pl.travelly.persistence.post.entity.Post;
+import pwr.edu.pl.travelly.persistence.user.entity.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,6 +36,8 @@ public class PostSpecification implements Specification<Post> {
         SpecificationUtils.addFromToPredicate(criteriaBuilder, begin, end, root.get(Post.Fields.activeFrom), root.get(Post.Fields.activeTo) , predicateList);
 
         SpecificationUtils.isEqualParticipants(criteriaBuilder, filterForm.getParticipants(), root.get(Post.Fields.participants), predicateList);
+        SpecificationUtils.addStatusPredicate(criteriaBuilder, filterForm.getActive(), root.get(Post.Fields.active), predicateList);
+        SpecificationUtils.addAuthorPredicate(criteriaBuilder, filterForm.getAuthor(), root.get(Post.Fields.author).get("uuid"), predicateList);
 
         query.distinct(true);
 

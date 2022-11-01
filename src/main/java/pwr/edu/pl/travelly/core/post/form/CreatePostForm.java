@@ -45,6 +45,4 @@ public class CreatePostForm {
     private MultipartFile profileImage;
 
     private List<MultipartFile> images;
-
-    private List<String> images_urls;
 }

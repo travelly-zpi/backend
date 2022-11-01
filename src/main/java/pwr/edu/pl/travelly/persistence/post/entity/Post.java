@@ -59,6 +59,9 @@ public class Post extends AbstractEntity {
     @Column(name = "end_point")
     private String endPoint;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @Builder.Default
     @OneToMany(
             mappedBy = "post",

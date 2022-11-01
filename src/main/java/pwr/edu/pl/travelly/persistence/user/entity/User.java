@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import pwr.edu.pl.travelly.persistence.common.AbstractEntity;
 import pwr.edu.pl.travelly.persistence.post.entity.Post;
@@ -25,6 +26,7 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldNameConstants
 @Table(name = "\"user\"")
 public class User extends AbstractEntity {
 

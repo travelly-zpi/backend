@@ -17,6 +17,7 @@ import pwr.edu.pl.travelly.core.post.dto.PostListDto;
 import pwr.edu.pl.travelly.core.post.form.CreatePostForm;
 import pwr.edu.pl.travelly.core.post.form.CustomPageable;
 import pwr.edu.pl.travelly.core.post.form.PostFilterForm;
+import pwr.edu.pl.travelly.core.user.dto.UserDto;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -43,17 +44,11 @@ public class PostController {
         return ResponseEntity.ok(postFacade.findByUuid(uuid));
     }
 
-//    @RequestMapping(value="/{uuid}/activate", method = RequestMethod.PUT)
-//    public ResponseEntity<?> activatePost(@PathVariable final UUID uuid){
-//        postFacade.activate(uuid);
-//        return ResponseEntity.ok(user);
-//    }
-//
-//    @RequestMapping(value="/{uuid}/deactivate", method = RequestMethod.PUT)
-//    public ResponseEntity<?> deactivatePost(@PathVariable final UUID uuid){
-//        final UserDto user = userFacade.findByUuid(uuid);
-//        return ResponseEntity.ok(user);
-//    }
+    @RequestMapping(value="/{uuid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@PathVariable final UUID uuid){
+        postFacade.activate(uuid);
+        return (ResponseEntity<?>) ResponseEntity.ok();
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> createPost(@ModelAttribute @Valid final CreatePostForm createPostForm) throws IOException {

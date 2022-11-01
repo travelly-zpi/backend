@@ -13,4 +13,6 @@ public interface PostFacade {
     BoardDto findAll(final Pageable pageable, final PostFilterForm filterForm);
     PostDto findByUuid(final UUID uuid);
     PostDto create(final CreatePostForm createPostForm) throws IOException;
+    void activate(final UUID uuid);
+    void deactivate(final UUID uuid);
 }

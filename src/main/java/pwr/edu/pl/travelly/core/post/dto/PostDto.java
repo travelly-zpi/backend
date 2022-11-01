@@ -27,6 +27,7 @@ public class PostDto {
     private int participants;
     private String startPoint;
     private String endPoint;
+    private Boolean active;
     private PostAuthorDto postAuthorDto;
     private String profileImageUrl;
     private List<String> imagesUrls;

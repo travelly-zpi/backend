@@ -42,4 +42,14 @@ public class PostFacadeImpl implements PostFacade{
     public PostDto create(final CreatePostForm createPostForm) throws IOException {
         return postPort.create(createPostForm);
     }
+
+    @Override
+    public void activate(final UUID uuid) {
+
+    }
+
+    @Override
+    public void deactivate(final UUID uuid) {
+
+    }
 }
