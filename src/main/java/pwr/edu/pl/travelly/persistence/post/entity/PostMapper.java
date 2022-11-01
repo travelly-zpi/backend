@@ -25,6 +25,7 @@ public class PostMapper {
                 .activeFrom(post.getActiveFrom())
                 .activeTo(post.getActiveTo())
                 .creationTimestamp(post.getCreationTimestamp())
+                .active(post.getActive())
                 .profileImageUrl(getMainAttachmentUrl(post))
                 .imagesUrls(getAttachments(post))
                 .postAuthorDto(toPostAuthorDto(post.getAuthor()))

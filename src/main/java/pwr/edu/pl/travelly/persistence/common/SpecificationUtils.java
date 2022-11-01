@@ -6,6 +6,7 @@ import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SpecificationUtils {
 
@@ -29,6 +30,18 @@ public class SpecificationUtils {
     public static void isEqualParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<String> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(value)) {
             predicateList.add(criteriaBuilder.equal(path,value));
+        }
+    }
+
+    public static void addAuthorPredicate(final CriteriaBuilder criteriaBuilder, final UUID value, final Path<String> path, final List<Predicate> predicateList) {
+        if (Objects.nonNull(value)) {
+            predicateList.add(criteriaBuilder.equal(path,value));
+        }
+    }
+
+    public static void addStatusPredicate(final CriteriaBuilder criteriaBuilder, final Boolean status, final Path<String> path, final List<Predicate> predicateList) {
+        if (Objects.nonNull(status)) {
+            predicateList.add(criteriaBuilder.equal(path, status));
         }
     }
 
