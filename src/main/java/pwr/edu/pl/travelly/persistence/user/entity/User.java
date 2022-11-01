@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import pwr.edu.pl.travelly.persistence.common.AbstractEntity;
-import pwr.edu.pl.travelly.persistence.localisation.entity.Localisation;
 import pwr.edu.pl.travelly.persistence.post.entity.Post;
 
 import javax.persistence.CascadeType;
@@ -60,7 +59,7 @@ public class User extends AbstractEntity {
     @Column(name = "localisation")
     private String localisation;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     @Column(name = "enable")
