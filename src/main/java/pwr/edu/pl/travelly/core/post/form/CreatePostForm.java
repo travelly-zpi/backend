@@ -32,8 +32,11 @@ public class CreatePostForm {
     //@NotNull(message = "BLANK_PARTICIPANTS")
     private int participants;
 
-    //@NotBlank(message = "BLANK_LOCALISATION")
-    private String localisation;
+    //@NotBlank(message = "BLANK_START_POINT")
+    private String startPoint;
+
+    //@NotBlank(message = "BLANK_END_POINT")
+    private String endPoint;
 
     //@NotNull(message = "BLANK_AUTHOR")
     private UUID author;

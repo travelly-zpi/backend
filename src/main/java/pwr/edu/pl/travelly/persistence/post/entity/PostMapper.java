@@ -19,7 +19,8 @@ public class PostMapper {
                 .uuid(post.getUuid())
                 .title(post.getTitle())
                 .description(post.getDescription())
-                .localisation(post.getLocalisation())
+                .startPoint(post.getStartPoint())
+                .endPoint(post.getEndPoint())
                 .participants(post.getParticipants())
                 .activeFrom(post.getActiveFrom())
                 .activeTo(post.getActiveTo())
@@ -49,7 +50,8 @@ public class PostMapper {
         return Post.builder()
                 .title(form.getTitle())
                 .description(form.getDescription())
-                .localisation(form.getLocalisation())
+                .startPoint(form.getStartPoint())
+                .endPoint(form.getEndPoint())
                 .participants(form.getParticipants())
                 .activeFrom(LocalDate.parse(form.getActiveFrom()))
                 .activeTo(LocalDate.parse(form.getActiveTo()))
@@ -62,7 +64,7 @@ public class PostMapper {
         return PostListDto.builder()
                 .uuid(post.getUuid())
                 .title(post.getTitle())
-                .profileImageUrl(getMainAttachmentUrl(post))
+                .mainImageUrl(getMainAttachmentUrl(post))
                 .description(post.getDescription())
                 .build();
     }

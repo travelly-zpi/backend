@@ -1,22 +1,13 @@
 package pwr.edu.pl.travelly.persistence.common;
 
-import pwr.edu.pl.travelly.persistence.post.entity.Post;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 public class SpecificationUtils {
-
-    public static void addLikePredicate(final CriteriaBuilder criteriaBuilder, final String value, Path<String> path, final List<Predicate> predicateList) {
-        if (Objects.nonNull(value)) {
-            predicateList.add(criteriaBuilder.like(criteriaBuilder.lower(path), "%" + value.toLowerCase() + "%"));
-        }
-    }
 
     public static void addFromToPredicate(final CriteriaBuilder criteriaBuilder,
                                           final LocalDate beginDate,
@@ -35,9 +26,15 @@ public class SpecificationUtils {
         }
     }
 
-    public static void isLike(final CriteriaBuilder criteriaBuilder, final String value, final Root<Post> root, final String field, final List<Predicate> predicateList) {
+    public static void isEqualParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<String> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(value)) {
-            predicateList.add(criteriaBuilder.like(root.get(field), "%" + value + "%"));
+            predicateList.add(criteriaBuilder.equal(path,value));
+        }
+    }
+
+    public static void isLike(final CriteriaBuilder criteriaBuilder, final String value, final Path<String> path, final List<Predicate> predicateList) {
+        if (Objects.nonNull(value)) {
+            predicateList.add(criteriaBuilder.like(criteriaBuilder.lower(path), "%" + value.toLowerCase() + "%"));
         }
     }
 

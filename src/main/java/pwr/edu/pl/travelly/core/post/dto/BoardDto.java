@@ -6,16 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostListDto {
-    private UUID uuid;
-    private String title;
-    private String description;
-    private String mainImageUrl;
+public class BoardDto {
+    List<PostListDto> posts;
+    long count;
+    long pages;
 }

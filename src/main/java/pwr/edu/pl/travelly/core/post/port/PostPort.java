@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public interface PostPort {
     List<PostListDto> findAll(final Pageable pageable, final PostFilterForm filterForm);
+    long count(final PostFilterForm filterForm);
     PostDto findByUuid(final UUID uuid);
     PostDto create(final CreatePostForm createPostForm) throws IOException;
 }

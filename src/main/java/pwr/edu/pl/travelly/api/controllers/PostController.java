@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pwr.edu.pl.travelly.core.post.PostFacade;
+import pwr.edu.pl.travelly.core.post.dto.PostListDto;
 import pwr.edu.pl.travelly.core.post.form.CreatePostForm;
 import pwr.edu.pl.travelly.core.post.form.CustomPageable;
 import pwr.edu.pl.travelly.core.post.form.PostFilterForm;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
