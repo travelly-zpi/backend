@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.core.user;
 
-import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
@@ -32,10 +31,6 @@ import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
@@ -58,7 +53,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
-    @Value("http://localhost:3000")
+    @Value("https://proud-pond-0b8236103.2.azurestaticapps.net/")   //"http://localhost:3000"
     private String baseURL;
 
     public UserFacadeImpl(final UserPort userPort,
