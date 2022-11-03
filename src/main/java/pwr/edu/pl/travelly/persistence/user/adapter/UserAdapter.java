@@ -108,8 +108,8 @@ public class UserAdapter implements UserPort {
     }
 
     private void copyFromUpdateToEntity(final UpdateUserForm updateUserForm, final User user) {
-
-        user.setUserName(updateUserForm.getFirstName());
+        //user.setUserName(updateUserForm.getEmail());
+        user.setFirstName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());
         user.setDescription(updateUserForm.getDescription());
