@@ -14,3 +14,4 @@ public class UpdatePasswordForm {
     public String oldPassword;
     public String newPassword;
 }
+
