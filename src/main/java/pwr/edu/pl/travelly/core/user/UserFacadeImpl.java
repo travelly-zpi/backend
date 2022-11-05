@@ -154,7 +154,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     private Boolean profileImageForUserExists(final UserDto user) {
         final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
-        profileImageBlobClient.getProperties();
         return profileImageBlobClient.exists();
     }
 
