@@ -180,11 +180,15 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
             throw new ExistsException("EMAIL_EXISTS");
         }
 
-        if(Objects.nonNull(updateUserForm.getImage())) {
-          uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
-        }
+        final UserDto updatedUser = userPort.update(updateUserForm);
 
-        return userPort.update(updateUserForm);
+        if(Objects.nonNull(updateUserForm.getImage())) {
+            uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
+        } else{
+            final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+updatedUser.getUuid().toString());
+            blob.delete();
+        }
+        return updatedUser;
     }
 
     private void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
