@@ -7,7 +7,6 @@ import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
-import pwr.edu.pl.travelly.persistence.localisation.repository.LocalisationRepository;
 import pwr.edu.pl.travelly.persistence.user.entity.Role;
 import pwr.edu.pl.travelly.persistence.user.entity.User;
 import pwr.edu.pl.travelly.persistence.user.entity.UserMapper;
