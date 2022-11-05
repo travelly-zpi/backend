@@ -133,8 +133,8 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
-    public void updatePassword(UpdatePasswordForm updatePasswordForm) {
-
+    public void updatePassword(final UpdatePasswordForm updatePasswordForm) {
+        updatePasswordForm.getUuid();
     }
 
     @Override
@@ -186,21 +186,22 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         if (userPort.existsByUserNameAndUuidNot(updateUserForm.getEmail(), updateUserForm.getUuid())) {
             throw new ExistsException("EMAIL_EXISTS");
         }
-
         final UserDto updatedUser = userPort.update(updateUserForm);
-
-        if(Objects.nonNull(updateUserForm.getImage())) {
-            uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
-        } else{
-            final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+updatedUser.getUuid().toString());
-            blob.delete();
-        }
         return updatedUser;
     }
 
-    private void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
-        BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+userUuid.toString());
+    @Override
+    public void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
+        final UserDto user = userPort.findByUuid(userUuid);
+        final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
         blob.upload(image.getInputStream(), image.getSize(), true);
+    }
+
+    @Override
+    public void removeImage(final UUID userUuid) {
+        final UserDto user = userPort.findByUuid(userUuid);
+        final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+        blob.delete();
     }
 
     private boolean falsePassword(final CharSequence rawPassword, final String encodedPassword){

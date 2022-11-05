@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import pwr.edu.pl.travelly.core.user.UserFacade;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
+import pwr.edu.pl.travelly.core.user.form.UpdatePasswordForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 
 import javax.validation.Valid;
@@ -53,8 +55,26 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUser(@ModelAttribute @Valid final UpdateUserForm userForm) throws IOException {
+    public ResponseEntity<?> updateUser(@RequestBody @Valid final UpdateUserForm userForm) throws IOException {
         return ResponseEntity.ok(userFacade.update(userForm));
+    }
+
+    @PutMapping(value="/{uuid}/uploadProfileImage")
+    public ResponseEntity<?> uploadUserProfileImage(@RequestBody @Valid final MultipartFile image, @PathVariable("uuid") UUID userUuid) throws IOException {
+        userFacade.uploadImage(image, userUuid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value="/{uuid}/removeProfileImage")
+    public ResponseEntity<?> removeUserProfileImage(@PathVariable("uuid") UUID userUuid) throws IOException {
+        userFacade.removeImage(userUuid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value="/changePassword")
+    public ResponseEntity<?> updateUserPassword(@RequestBody @Valid final UpdatePasswordForm passwordForm) {
+        userFacade.updatePassword(passwordForm);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/register/verify", method = RequestMethod.GET)
