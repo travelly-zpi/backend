@@ -195,7 +195,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
             final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+updatedUser.getUuid().toString());
             blob.delete();
         }
-
         return updatedUser;
     }
 
