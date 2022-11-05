@@ -3,7 +3,6 @@ package pwr.edu.pl.travelly.persistence.user.entity;
 import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
-import pwr.edu.pl.travelly.persistence.localisation.entity.LocalisationMapper;
 
 import java.util.Objects;
 
