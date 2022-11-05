@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.core.user;
 
-import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
@@ -29,13 +28,10 @@ import pwr.edu.pl.travelly.core.user.dto.LoggedUserDto;
 import pwr.edu.pl.travelly.core.user.dto.UserDto;
 import pwr.edu.pl.travelly.core.user.form.CreateUserForm;
 import pwr.edu.pl.travelly.core.user.form.LoginUserForm;
+import pwr.edu.pl.travelly.core.user.form.UpdatePasswordForm;
 import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import pwr.edu.pl.travelly.core.user.port.UserPort;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
@@ -137,6 +133,11 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
+    public void updatePassword(UpdatePasswordForm updatePasswordForm) {
+
+    }
+
+    @Override
     public void resendVerification(final LoginUserForm loginUserForm) {
         String email = loginUserForm.getEmail();
         sendRegistrationConfirmationEmail(userPort.findByEmail(email), email, loginUserForm.getPassword());
@@ -153,6 +154,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     private Boolean profileImageForUserExists(final UserDto user) {
         final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+        profileImageBlobClient.getProperties();
         return profileImageBlobClient.exists();
     }
 
@@ -185,11 +187,16 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
             throw new ExistsException("EMAIL_EXISTS");
         }
 
+        final UserDto updatedUser = userPort.update(updateUserForm);
+
         if(Objects.nonNull(updateUserForm.getImage())) {
-          uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
+            uploadImage(updateUserForm.getImage(), updateUserForm.getUuid());
+        } else{
+            final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+updatedUser.getUuid().toString());
+            blob.delete();
         }
 
-        return userPort.update(updateUserForm);
+        return updatedUser;
     }
 
     private void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
