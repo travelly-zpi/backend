@@ -34,7 +34,6 @@ import pwr.edu.pl.travelly.core.user.port.UserPort;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -133,11 +132,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     @Override
-    public void updatePassword(final UpdatePasswordForm updatePasswordForm) {
-        updatePasswordForm.getUuid();
-    }
-
-    @Override
     public void resendVerification(final LoginUserForm loginUserForm) {
         String email = loginUserForm.getEmail();
         sendRegistrationConfirmationEmail(userPort.findByEmail(email), email, loginUserForm.getPassword());
@@ -154,7 +148,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     private Boolean profileImageForUserExists(final UserDto user) {
         final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
-        profileImageBlobClient.getProperties();
         return profileImageBlobClient.exists();
     }
 
@@ -188,6 +181,15 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         }
         final UserDto updatedUser = userPort.update(updateUserForm);
         return updatedUser;
+    }
+
+    @Override
+    public void updatePassword(final UpdatePasswordForm updateUserForm) {
+        final String currentPassword = userPort.getUserPassword(updateUserForm.getUuid());
+        if(falsePassword(updateUserForm.getOldPassword(), currentPassword)) {
+            throw new IllegalArgumentException("FALSE_PASSWORD");
+        }
+        userPort.setNewUserPassword(updateUserForm.getUuid(), bcryptEncoder.encode(updateUserForm.getNewPassword()));
     }
 
     @Override

@@ -106,8 +106,24 @@ public class UserAdapter implements UserPort {
         return UserMapper.toDto(newUser);
     }
 
+    @Override
+    @Transactional
+    public String getUserPassword(final UUID userUuid) {
+        final User user = userRepository.findUserByUuid(userUuid)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return user.getPassword();
+    }
+
+    @Override
+    @Transactional
+    public void setNewUserPassword(final UUID userUuid, final String newPassword) {
+        final User user = userRepository.findUserByUuid(userUuid)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setPassword(newPassword);
+    }
+
     private void copyFromUpdateToEntity(final UpdateUserForm updateUserForm, final User user) {
-        //user.setUserName(updateUserForm.getEmail());
+        user.setUserName(updateUserForm.getEmail());
         user.setFirstName(updateUserForm.getFirstName());
         user.setLastName(updateUserForm.getLastName());
         user.setLanguages(updateUserForm.getLanguages());

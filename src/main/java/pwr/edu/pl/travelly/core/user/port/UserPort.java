@@ -12,6 +12,9 @@ public interface UserPort {
     UserDto save(final CreateUserForm createUserForm);
 
     UserDto update(final UpdateUserForm updateUserForm) throws IOException;
+
+    String getUserPassword(final UUID userUuid);
+    void setNewUserPassword(final UUID userUuid, final String newPassword);
     
     LoggedUserDto findByUserName(final String email);
     UserDto findByUuid(final UUID uuid);
