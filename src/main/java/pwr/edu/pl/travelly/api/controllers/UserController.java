@@ -65,7 +65,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @PutMapping(value="/{uuid}/removeProfileImage")
     public ResponseEntity<?> removeUserProfileImage(@PathVariable("uuid") UUID userUuid) throws IOException {
         userFacade.removeImage(userUuid);

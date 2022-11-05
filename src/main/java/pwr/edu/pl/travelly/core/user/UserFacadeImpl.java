@@ -183,7 +183,6 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         return updatedUser;
     }
 
-
     @Override
     public void updatePassword(final UpdatePasswordForm updateUserForm) {
         final String currentPassword = userPort.getUserPassword(updateUserForm.getUuid());

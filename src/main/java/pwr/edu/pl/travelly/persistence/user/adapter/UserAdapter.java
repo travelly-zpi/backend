@@ -114,7 +114,6 @@ public class UserAdapter implements UserPort {
         return user.getPassword();
     }
 
-
     @Override
     @Transactional
     public void setNewUserPassword(final UUID userUuid, final String newPassword) {
