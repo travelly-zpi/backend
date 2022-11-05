@@ -56,7 +56,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
-    @Value("http://localhost:3000")
+    @Value("https://proud-pond-0b8236103.2.azurestaticapps.net/")   //"http://localhost:3000"
     private String baseURL;
 
     private final BlobContainerClient containerClient;
