@@ -26,6 +26,7 @@ public class UserDto {
     private LocalDate dateOfBirth;
     private String languages;
     private String description;
+    private String imageUrl;
     @JsonIgnore
     private String role;
     private String localisation;

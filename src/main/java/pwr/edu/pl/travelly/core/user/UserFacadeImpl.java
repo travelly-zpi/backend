@@ -51,10 +51,14 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
             "EndpointSuffix=core.windows.net;" +
             "DefaultEndpointsProtocol=https;";
 
+    private final String PROFILE_IMAGE_PREFIX = "profile_";
+
     @Value("${jwt.token.validity}")
     public long TOKEN_VALIDITY;
     @Value("https://proud-pond-0b8236103.2.azurestaticapps.net/")   //"http://localhost:3000"
     private String baseURL;
+
+    private final BlobContainerClient containerClient;
 
     public UserFacadeImpl(final UserPort userPort,
                           final BCryptPasswordEncoder bcryptEncoder,
@@ -66,6 +70,12 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
         this.jwtTokenUtil = jwtTokenUtil;
         this.authenticationManager = authenticationManager;
         this.emailService= emailService;
+
+        containerClient = new BlobContainerClientBuilder()
+                .connectionString(AZURE_CONNECTION)
+                .containerName("images")
+                .buildClient();
+
     }
 
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
@@ -129,7 +139,16 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Override
     public UserDto findByUuid(final UUID uuid) {
-        return userPort.findByUuid(uuid);
+        final UserDto user = userPort.findByUuid(uuid);
+        if(profileImageForUserExists(user)) {
+            user.setImageUrl(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+        }
+        return user;
+    }
+
+    private Boolean profileImageForUserExists(final UserDto user) {
+        final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+        return profileImageBlobClient.exists();
     }
 
     @Override
@@ -169,12 +188,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     }
 
     private void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
-        BlobContainerClient containerClient = new BlobContainerClientBuilder()
-                .connectionString(AZURE_CONNECTION)
-                .containerName("images")
-                .buildClient();
-
-        BlobClient blob = containerClient.getBlobClient(userUuid.toString());
+        BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+userUuid.toString());
         blob.upload(image.getInputStream(), image.getSize(), true);
     }
 
