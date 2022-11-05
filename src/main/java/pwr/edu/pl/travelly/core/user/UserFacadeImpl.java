@@ -192,6 +192,7 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
 
     @Override
     public void uploadImage(final MultipartFile image, final UUID userUuid) throws IOException {
+
         final UserDto user = userPort.findByUuid(userUuid);
         final BlobClient blob = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
         blob.upload(image.getInputStream(), image.getSize(), true);

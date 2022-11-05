@@ -24,7 +24,6 @@ import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
-
 import static java.util.Objects.nonNull;
 
 @RestController

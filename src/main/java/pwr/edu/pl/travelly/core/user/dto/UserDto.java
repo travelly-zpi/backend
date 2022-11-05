@@ -31,3 +31,4 @@ public class UserDto {
     private String role;
     private String localisation;
 }
+
