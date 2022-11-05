@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.core.user.form;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
