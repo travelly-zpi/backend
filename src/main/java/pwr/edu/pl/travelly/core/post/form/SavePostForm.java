@@ -3,16 +3,14 @@ package pwr.edu.pl.travelly.core.post.form;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 @Setter
 @Getter
-public class CreatePostForm {
+public class SavePostForm {
 
     @NotBlank(message = "BLANK_TITLE")
     private String title;
@@ -40,9 +38,4 @@ public class CreatePostForm {
 
     //@NotNull(message = "BLANK_AUTHOR")
     private UUID author;
-
-    //@NotNull(message = "BLANK_PROFILE_IMAGE")
-    private MultipartFile profileImage;
-
-    private List<MultipartFile> images;
 }
