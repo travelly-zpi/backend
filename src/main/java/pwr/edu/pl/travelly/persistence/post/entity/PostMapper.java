@@ -37,7 +37,7 @@ public class PostMapper {
         return post.getAttachments()
                 .stream()
                 .filter(PostAttachment::isMain)
-                .findFirst().orElseThrow(()->new NotFoundException("NOT_FOUND_MAIN_IMAGE"))
+                .findFirst().orElseThrow(null)
                 .getUrl();
     }
 
