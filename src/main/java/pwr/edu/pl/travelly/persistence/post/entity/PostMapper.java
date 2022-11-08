@@ -1,10 +1,11 @@
 package pwr.edu.pl.travelly.persistence.post.entity;
 
 import pwr.edu.pl.travelly.core.common.exception.NotFoundException;
+import pwr.edu.pl.travelly.core.post.dto.PostAttachmentDto;
 import pwr.edu.pl.travelly.core.post.dto.PostAuthorDto;
 import pwr.edu.pl.travelly.core.post.dto.PostDto;
 import pwr.edu.pl.travelly.core.post.dto.PostListDto;
-import pwr.edu.pl.travelly.core.post.form.CreatePostForm;
+import pwr.edu.pl.travelly.core.post.form.SavePostForm;
 import pwr.edu.pl.travelly.persistence.user.entity.User;
 
 import java.time.LocalDate;
@@ -40,6 +41,14 @@ public class PostMapper {
                 .getUrl();
     }
 
+    public static PostAttachmentDto toAttachmentDto(final PostAttachment attachment) {
+        return PostAttachmentDto.builder()
+                .attachmentUuid(attachment.getUuid())
+                .isMain(attachment.isMain())
+                .url(attachment.getUrl())
+                .build();
+    }
+
     private static List<String> getAttachments(final Post post) {
         return post.getAttachments()
                 .stream()
@@ -47,7 +56,7 @@ public class PostMapper {
                 .collect(Collectors.toList());
     }
 
-    public static Post toEntity(final CreatePostForm form) {
+    public static Post toEntity(final SavePostForm form) {
         return Post.builder()
                 .title(form.getTitle())
                 .description(form.getDescription())
