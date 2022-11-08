@@ -49,7 +49,7 @@ public class PostController {
                 .endPoint(endPoint)
                 .author(author)
                 .build();
-        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page,size), filterForm));
+        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page-1,size), filterForm));
     }
 
     @RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
