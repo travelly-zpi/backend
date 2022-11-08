@@ -39,7 +39,7 @@
                         <tr>
                             <td>
                                 <div class="text" style="padding: 0 2em; text-align: center;">
-                                    <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 2em;">Hi, <span th:text="${firstName}"></p>
+                                    <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 2em;">Hi, <span th:text="${firstName}"></span></p>
                                     <h3>We're excited to have you get started. First, you need to confirm your account. Just press the button below.</h3>
                                     <button style="background-color: #FF812C; color: white; padding: 8px; border:none;cursor:pointer;">
                                         <a th:href="${verificationURL}" class="btn btn-primary" style="color:white; text-decoration:none;">Validate Account</a>
@@ -49,9 +49,9 @@
                         </tr>
                         <tr>
                             <td>
-                                <div class="text" style="padding: 0 2.5em; text-align: center;">
+                                <div class="text" style="padding: 2.5em 2.5em; text-align: center;">
                                     <h4>If you experience any issues with the button above, copy and paste the URL below into your web browser.</h4>
-                                    <p th:text="${verificationURL}" style="width: 200px;overflow:hidden; margin:auto;text-overflow: ellipsis;"></p>
+                                    <p th:text="${verificationURL}" style="font-size: 10px"></p>
                                 </div>
                             </td>
                         </tr>
