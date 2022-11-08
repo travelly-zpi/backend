@@ -27,6 +27,8 @@ public class SavePostForm {
     //@NotBlank(message = "BLANK_ACTIVE_TO")
     private String type;
 
+    private Boolean active;
+
     //@NotNull(message = "BLANK_PARTICIPANTS")
     private int participants;
 
