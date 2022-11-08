@@ -11,6 +11,8 @@ import pwr.edu.pl.travelly.persistence.user.entity.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PostMapper {
@@ -34,11 +36,11 @@ public class PostMapper {
     }
 
     private static String getMainAttachmentUrl(final Post post) {
-        return post.getAttachments()
+        final Optional<PostAttachment> first = post.getAttachments()
                 .stream()
                 .filter(PostAttachment::isMain)
-                .findFirst().orElse(null)
-                .getUrl();
+                .findFirst();
+        return first.map(PostAttachment::getUrl).orElse(null);
     }
 
     public static PostAttachmentDto toAttachmentDto(final PostAttachment attachment) {
@@ -63,6 +65,7 @@ public class PostMapper {
                 .startPoint(form.getStartPoint())
                 .endPoint(form.getEndPoint())
                 .participants(form.getParticipants())
+                .active(false)
                 .activeFrom(LocalDate.parse(form.getActiveFrom()))
                 .activeTo(LocalDate.parse(form.getActiveTo()))
                 .type(form.getType())
