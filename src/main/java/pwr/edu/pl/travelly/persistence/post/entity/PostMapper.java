@@ -37,7 +37,7 @@ public class PostMapper {
         return post.getAttachments()
                 .stream()
                 .filter(PostAttachment::isMain)
-                .findFirst().orElseThrow(null)
+                .findFirst().orElse(null)
                 .getUrl();
     }
 
