@@ -31,8 +31,8 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> findAllPosts(@RequestParam final int page,@RequestParam final int size, @RequestBody final PostFilterForm filterForm){
-        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page,size), filterForm));
+    public ResponseEntity<?> findAllPosts(@RequestBody final PostFilterForm filterForm){
+        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(filterForm.getPage(), filterForm.getSize()), filterForm));
     }
 
     @RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
