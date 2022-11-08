@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.persistence.post.entity;
 
-import pwr.edu.pl.travelly.core.common.exception.NotFoundException;
 import pwr.edu.pl.travelly.core.post.dto.PostAttachmentDto;
 import pwr.edu.pl.travelly.core.post.dto.PostAuthorDto;
 import pwr.edu.pl.travelly.core.post.dto.PostDto;
@@ -11,7 +10,6 @@ import pwr.edu.pl.travelly.persistence.user.entity.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,11 +35,14 @@ public class PostMapper {
     }
 
     private static String getMainAttachmentUrl(final Post post) {
-        final Optional<PostAttachment> first = post.getAttachments()
-                .stream()
-                .filter(PostAttachment::isMain)
-                .findFirst();
-        return first.map(PostAttachment::getUrl).orElse(null);
+        if(!post.getAttachments().isEmpty()) {
+            final Optional<PostAttachment> first = post.getAttachments()
+                    .stream()
+                    .filter(PostAttachment::isMain)
+                    .findFirst();
+            return first.map(PostAttachment::getUrl).orElse(null);
+        }
+        return null;
     }
 
     public static PostAttachmentDto toAttachmentDto(final PostAttachment attachment) {
@@ -86,7 +87,7 @@ public class PostMapper {
     private static PostAuthorDto toPostAuthorDto(final User user) {
         return PostAuthorDto.builder()
                 .uuid(user.getUuid())
-                .userName(user.getUserName())
+                .email(user.getUserName())
                 .build();
     }
 

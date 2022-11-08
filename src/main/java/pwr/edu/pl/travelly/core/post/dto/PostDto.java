@@ -1,5 +1,6 @@
 package pwr.edu.pl.travelly.core.post.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +29,9 @@ public class PostDto {
     private String startPoint;
     private String endPoint;
     private Boolean active;
+    @JsonProperty("author")
     private PostAuthorDto postAuthorDto;
+    @JsonProperty("mainImageUrl")
     private String profileImageUrl;
     private List<String> imagesUrls;
 }

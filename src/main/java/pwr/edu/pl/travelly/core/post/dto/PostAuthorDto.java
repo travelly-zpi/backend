@@ -15,5 +15,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PostAuthorDto {
     private UUID uuid;
-    private String userName;
+    private String email;
 }
