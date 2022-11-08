@@ -1,5 +1,6 @@
 package pwr.edu.pl.travelly.persistence.post.entity;
 
+import org.apache.commons.lang3.StringUtils;
 import pwr.edu.pl.travelly.core.post.dto.PostAttachmentDto;
 import pwr.edu.pl.travelly.core.post.dto.PostAuthorDto;
 import pwr.edu.pl.travelly.core.post.dto.PostDto;
@@ -9,6 +10,7 @@ import pwr.edu.pl.travelly.persistence.user.entity.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,13 +37,13 @@ public class PostMapper {
     }
 
     private static String getMainAttachmentUrl(final Post post) {
-        if(!post.getAttachments().isEmpty()) {
-            final Optional<PostAttachment> first = post.getAttachments()
-                    .stream()
-                    .filter(PostAttachment::isMain)
-                    .findFirst();
-            return first.map(PostAttachment::getUrl).orElse(null);
-        }
+//        if(!post.getAttachments().isEmpty()) {
+//            final Optional<PostAttachment> first = post.getAttachments()
+//                    .stream()
+//                    .filter(PostAttachment::isMain)
+//                    .findFirst();
+//            return first.map(PostAttachment::getUrl).orElse(null);
+//        }
         return null;
     }
 
@@ -54,10 +56,11 @@ public class PostMapper {
     }
 
     private static List<String> getAttachments(final Post post) {
-        return post.getAttachments()
-                .stream()
-                .map(PostAttachment::getUrl)
-                .collect(Collectors.toList());
+//        return post.getAttachments()
+//                .stream()
+//                .map(PostAttachment::getUrl)
+//                .collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     public static Post toEntity(final SavePostForm form) {
@@ -79,7 +82,7 @@ public class PostMapper {
         return PostListDto.builder()
                 .uuid(post.getUuid())
                 .title(post.getTitle())
-                .mainImageUrl(getMainAttachmentUrl(post))
+                .mainImageUrl(null)
                 .description(post.getDescription())
                 .build();
     }

@@ -83,7 +83,7 @@ public class PostAdapter implements PostPort {
     public void addAttachment(final UUID postUuid, final PostAttachment attachment) {
         final Post post = postRepository.findByUuid(postUuid)
                 .orElseThrow(() -> new NotFoundException("POST_NOT_FOUND"));
-        post.addAttachment(attachment);
+        //post.addAttachment(attachment);
         postRepository.save(post);
     }
 

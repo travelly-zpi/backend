@@ -29,6 +29,6 @@ public class PostAttachment extends AbstractEntity {
     @Column(name = "profile_image")
     private boolean isMain ;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Post post;
 }
