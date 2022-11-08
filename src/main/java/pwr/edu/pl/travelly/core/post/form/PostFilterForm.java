@@ -1,5 +1,6 @@
 package pwr.edu.pl.travelly.core.post.form;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class PostFilterForm {
     private String startDate;
     private String endDate;

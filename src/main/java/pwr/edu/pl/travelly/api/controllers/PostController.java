@@ -31,7 +31,24 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> findAllPosts(@RequestParam final int page,@RequestParam final int size, @RequestBody final PostFilterForm filterForm){
+    public ResponseEntity<?> findAllPosts(@RequestParam final int page,
+                                          @RequestParam final int size,
+                                          @RequestParam final String startDate,
+                                          @RequestParam final String endDate,
+                                          @RequestParam final Boolean active,
+                                          @RequestParam final Integer participants,
+                                          @RequestParam final String startPoint,
+                                          @RequestParam final String endPoint,
+                                          @RequestParam final UUID author){
+        final PostFilterForm filterForm = PostFilterForm.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .active(active)
+                .participants(participants)
+                .startPoint(startPoint)
+                .endPoint(endPoint)
+                .author(author)
+                .build();
         return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page,size), filterForm));
     }
 
