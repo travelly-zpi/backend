@@ -33,13 +33,13 @@ public class PostController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> findAllPosts(@RequestParam final int page,
                                           @RequestParam final int size,
-                                          @RequestParam final String startDate,
-                                          @RequestParam final String endDate,
-                                          @RequestParam final Boolean active,
-                                          @RequestParam final Integer participants,
-                                          @RequestParam final String startPoint,
-                                          @RequestParam final String endPoint,
-                                          @RequestParam final UUID author){
+                                          @RequestParam(required = false) final String startDate,
+                                          @RequestParam(required = false) final String endDate,
+                                          @RequestParam(required = false) final Boolean active,
+                                          @RequestParam(required = false) final Integer participants,
+                                          @RequestParam(required = false) final String startPoint,
+                                          @RequestParam(required = false) final String endPoint,
+                                          @RequestParam(required = false) final UUID author){
         final PostFilterForm filterForm = PostFilterForm.builder()
                 .startDate(startDate)
                 .endDate(endDate)
