@@ -12,6 +12,8 @@ import java.util.UUID;
 @Getter
 @Builder
 public class PostFilterForm {
+    private int page;
+    private int size;
     private String startDate;
     private String endDate;
     private Boolean active;
