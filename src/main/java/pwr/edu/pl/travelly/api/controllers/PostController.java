@@ -2,26 +2,22 @@ package pwr.edu.pl.travelly.api.controllers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import pwr.edu.pl.travelly.core.post.PostFacade;
-import pwr.edu.pl.travelly.core.post.dto.PostListDto;
-import pwr.edu.pl.travelly.core.post.form.CreatePostForm;
-import pwr.edu.pl.travelly.core.post.form.CustomPageable;
+import pwr.edu.pl.travelly.core.post.form.SavePostForm;
 import pwr.edu.pl.travelly.core.post.form.PostFilterForm;
-import pwr.edu.pl.travelly.core.user.dto.UserDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +31,24 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> findAllPosts(@RequestParam final int page,@RequestParam final int size, @RequestBody final PostFilterForm filterForm){
+    public ResponseEntity<?> findAllPosts(@RequestParam final int page,
+                                          @RequestParam final int size,
+                                          @RequestParam final String startDate,
+                                          @RequestParam final String endDate,
+                                          @RequestParam final Boolean active,
+                                          @RequestParam final Integer participants,
+                                          @RequestParam final String startPoint,
+                                          @RequestParam final String endPoint,
+                                          @RequestParam final UUID author){
+        final PostFilterForm filterForm = PostFilterForm.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .active(active)
+                .participants(participants)
+                .startPoint(startPoint)
+                .endPoint(endPoint)
+                .author(author)
+                .build();
         return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page,size), filterForm));
     }
 
@@ -45,14 +58,37 @@ public class PostController {
     }
 
     @RequestMapping(value="/{uuid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> update(@PathVariable final UUID uuid){
-        postFacade.activate(uuid);
+    public ResponseEntity<?> update(@PathVariable final UUID uuid, @RequestBody @Valid final SavePostForm savePostForm){
+        return ResponseEntity.ok(postFacade.update(uuid, savePostForm));
+    }
+
+    @RequestMapping(value="/{uuid}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable final UUID uuid){
+        postFacade.delete(uuid);
+        return (ResponseEntity<?>) ResponseEntity.ok();
+    }
+
+    @RequestMapping(value="/{uuid}/status", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateStatus(@PathVariable final UUID uuid, final @NotNull @RequestParam Boolean status){
+        postFacade.updateStatus(uuid, status);
+        return (ResponseEntity<?>) ResponseEntity.ok();
+    }
+
+    @RequestMapping(value="/{uuid}/attachmentUpload", method = RequestMethod.PUT)
+    public ResponseEntity<?> uploadAttachment(@RequestBody final MultipartFile image, final @PathVariable("uuid") UUID postUuid, final @RequestParam Boolean status) throws IOException {
+        postFacade.uploadAttachment(image, postUuid, status);
+        return (ResponseEntity<?>) ResponseEntity.ok();
+    }
+
+    @RequestMapping(value="/{uuid}/attachmentDelete", method = RequestMethod.PUT)
+    public ResponseEntity<?> deleteAttachment(@PathVariable("uuid") UUID postUuid, @RequestParam UUID attachmentUuid) {
+        postFacade.deleteAttachment(attachmentUuid);
         return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createPost(@ModelAttribute @Valid final CreatePostForm createPostForm) throws IOException {
-        return ResponseEntity.ok(postFacade.create(createPostForm));
+    public ResponseEntity<?> createPost(@RequestBody @Valid final SavePostForm savePostForm) {
+        return ResponseEntity.ok(postFacade.create(savePostForm));
     }
 
 }

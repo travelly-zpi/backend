@@ -11,6 +11,7 @@ import pwr.edu.pl.travelly.core.user.form.UpdateUserForm;
 import java.io.IOException;
 import java.util.UUID;
 
+
 public interface UserFacade {
     UserDto save(final CreateUserForm createUserForm);
     UserDto findByUuid(final UUID uuid);

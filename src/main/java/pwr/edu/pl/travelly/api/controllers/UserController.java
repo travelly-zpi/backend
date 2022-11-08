@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,10 +59,11 @@ public class UserController {
     }
 
     @PutMapping(value="/{uuid}/uploadProfileImage")
-    public ResponseEntity<?> uploadUserProfileImage(@RequestBody @Valid final MultipartFile image, @PathVariable("uuid") UUID userUuid) throws IOException {
+    public ResponseEntity<?> uploadUserProfileImage(@RequestBody final MultipartFile image, @PathVariable("uuid") UUID userUuid) throws IOException {
         userFacade.uploadImage(image, userUuid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @PutMapping(value="/{uuid}/removeProfileImage")
     public ResponseEntity<?> removeUserProfileImage(@PathVariable("uuid") UUID userUuid) throws IOException {

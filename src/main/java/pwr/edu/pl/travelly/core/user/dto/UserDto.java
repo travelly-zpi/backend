@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pwr.edu.pl.travelly.core.localisation.dto.LocalisationDto;
 
 import java.time.LocalDate;
 import java.util.UUID;
