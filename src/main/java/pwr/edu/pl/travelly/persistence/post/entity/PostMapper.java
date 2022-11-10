@@ -71,8 +71,8 @@ public class PostMapper {
                 .endPoint(form.getEndPoint())
                 .participants(form.getParticipants())
                 .active(form.getActive())
-                .activeFrom(LocalDate.parse(form.getActiveFrom()))
-                .activeTo(LocalDate.parse(form.getActiveTo()))
+                .activeFrom(form.getActiveFrom() != null ? LocalDate.parse(form.getActiveFrom()) : null)
+                .activeTo(form.getActiveTo() != null ? LocalDate.parse(form.getActiveTo()) : null)
                 .type(form.getType())
                 .creationTimestamp(LocalDateTime.now())
                 .build();
