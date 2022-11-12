@@ -2,6 +2,7 @@ package pwr.edu.pl.travelly.api.controllers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,25 +66,25 @@ public class PostController {
     @RequestMapping(value="/{uuid}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable final UUID uuid){
         postFacade.delete(uuid);
-        return (ResponseEntity<?>) ResponseEntity.ok();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/{uuid}/status", method = RequestMethod.PUT)
     public ResponseEntity<?> updateStatus(@PathVariable final UUID uuid, final @NotNull @RequestParam Boolean status){
         postFacade.updateStatus(uuid, status);
-        return (ResponseEntity<?>) ResponseEntity.ok();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/{uuid}/attachmentUpload", method = RequestMethod.PUT)
     public ResponseEntity<?> uploadAttachment(@RequestBody final MultipartFile image, final @PathVariable("uuid") UUID postUuid, final @RequestParam Boolean status) throws IOException {
         postFacade.uploadAttachment(image, postUuid, status);
-        return (ResponseEntity<?>) ResponseEntity.ok();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/{uuid}/attachmentDelete", method = RequestMethod.PUT)
     public ResponseEntity<?> deleteAttachment(@PathVariable("uuid") UUID postUuid, @RequestParam UUID attachmentUuid) {
         postFacade.deleteAttachment(attachmentUuid);
-        return (ResponseEntity<?>) ResponseEntity.ok();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
