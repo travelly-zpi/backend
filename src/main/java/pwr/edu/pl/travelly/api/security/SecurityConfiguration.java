@@ -50,7 +50,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/register/**", "/user/authenticate",
                         "/swagger-ui/**",
-                        "/v3/api-docs/**").permitAll()
+                        "/v3/api-docs/**",
+                        "/register/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
