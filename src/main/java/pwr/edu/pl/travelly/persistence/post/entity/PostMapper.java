@@ -96,7 +96,7 @@ public class PostMapper {
                 .uuid(post.getUuid())
                 .title(post.getTitle())
                 .type(post.getType())
-                .mainImageUrl(getMainAttachmentUrl(mainAttachmentUrl))
+                .mainImage(getMainAttachmentUrl(mainAttachmentUrl))
                 .description(post.getDescription())
                 .build();
     }

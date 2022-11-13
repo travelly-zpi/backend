@@ -17,6 +17,6 @@ public class PostListDto {
     private UUID uuid;
     private String title;
     private String description;
-    private String mainImageUrl;
+    private String mainImage;
     private String type;
 }
