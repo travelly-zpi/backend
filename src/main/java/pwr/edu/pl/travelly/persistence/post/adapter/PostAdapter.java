@@ -19,7 +19,6 @@ import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -83,18 +82,22 @@ public class PostAdapter implements PostPort {
     public void addAttachment(final UUID postUuid, final PostAttachment attachment) {
         final Post post = postRepository.findByUuid(postUuid)
                 .orElseThrow(() -> new NotFoundException("POST_NOT_FOUND"));
-        //post.addAttachment(attachment);
+        attachment.setPost(post);
+        post.getAttachments().add(attachment);
         postRepository.save(post);
     }
 
     @Override
     @Transactional
-    public String deleteAttachment(final UUID attachmentUuid) {
-        final PostAttachment attachment = this.postAttachmentRepository.findByUuid(attachmentUuid)
-                .orElseThrow(()-> new NotFoundException("ATTACHMENT_NOT_FOUND"));
-        final String attachmentName = attachment.getUrl();
-        this.postAttachmentRepository.delete(attachment);
-        return attachmentName;
+    public String deleteAttachment(final UUID postUuid, final UUID attachmentUuid) {
+        final Post post = postRepository.findByUuid(postUuid)
+                .orElseThrow(() -> new NotFoundException("POST_NOT_FOUND"));
+        final PostAttachment attachment = postAttachmentRepository.findByUuid(attachmentUuid)
+                .orElseThrow(() -> new NotFoundException("POST_ATTACHMENT_NOT_FOUND"));
+        final String attachmentUrl = attachment.getUrl();
+        post.getAttachments().remove(attachment);
+        postRepository.save(post);
+        return attachmentUrl;
     }
 
     @Override

@@ -16,8 +16,8 @@ public interface PostPort {
     PostDto findByUuid(final UUID post);
     PostDto create(final SavePostForm savePostForm);
     PostDto update(final UUID uuid, final SavePostForm updatePostForm);
-    void addAttachment(final UUID postUuid, final PostAttachment attachment);
-    String deleteAttachment(final UUID attachmentUuid);
+    void addAttachment(final UUID post, final PostAttachment attachment);
+    String deleteAttachment(final UUID postUuid, final UUID attachmentUuid);
     void delete(final UUID post);
     void updateStatus(final UUID post, final Boolean status);
 }

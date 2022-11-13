@@ -31,7 +31,7 @@ public class PostDto {
     private Boolean active;
     @JsonProperty("author")
     private PostAuthorDto postAuthorDto;
-    @JsonProperty("mainImageUrl")
-    private String profileImageUrl;
-    private List<String> imagesUrls;
+    @JsonProperty("mainImage")
+    private PostAttachmentDto profileImageUrl;
+    private List<PostAttachmentDto> images;
 }

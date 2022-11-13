@@ -63,8 +63,8 @@ public class PostFacadeImpl implements PostFacade{
     }
 
     @Override
-    public void deleteAttachment(final UUID attachmentUuid) {
-        final String attachmentName = postPort.deleteAttachment(attachmentUuid);
+    public void deleteAttachment(final UUID postUuid, final UUID attachmentUuid) {
+        final String attachmentName = postPort.deleteAttachment(postUuid, attachmentUuid);
         deleteImage(attachmentName);
     }
 
