@@ -16,7 +16,7 @@ public interface PostFacade {
     PostDto findByUuid(final UUID uuid);
     PostDto create(final SavePostForm savePostForm);
     PostDto update(final UUID uuid, final SavePostForm updatePostForm);
-    void deleteAttachment(final UUID AttachmentUuid);
+    void deleteAttachment(final UUID postUuid, final UUID AttachmentUuid);
     PostAttachmentDto uploadAttachment(final MultipartFile image, final UUID postUuid, final Boolean status) throws IOException;
     void delete(final UUID uuid);
     void updateStatus(final UUID uuid, final Boolean status);

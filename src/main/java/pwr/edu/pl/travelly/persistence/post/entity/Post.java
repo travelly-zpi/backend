@@ -1,7 +1,6 @@
 package pwr.edu.pl.travelly.persistence.post.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,21 +61,14 @@ public class Post extends AbstractEntity {
     @Column(name = "active")
     private Boolean active;
 
-//    @Builder.Default
-//    @OneToMany(
-//            mappedBy = "post",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.EAGER
-//    )
-//    private List<PostAttachment> attachments = new ArrayList<>();
-//
-//    public void addAttachment(final PostAttachment attachment) {
-//        attachments.add(attachment);
-//    }
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<PostAttachment> attachments = new ArrayList<>();
 
 }

@@ -1,6 +1,5 @@
 package pwr.edu.pl.travelly.persistence.post.entity;
 
-import org.apache.commons.lang3.StringUtils;
 import pwr.edu.pl.travelly.core.post.dto.PostAttachmentDto;
 import pwr.edu.pl.travelly.core.post.dto.PostAuthorDto;
 import pwr.edu.pl.travelly.core.post.dto.PostDto;
@@ -12,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,21 +29,30 @@ public class PostMapper {
                 .activeTo(post.getActiveTo())
                 .type(post.getType())
                 .creationTimestamp(post.getCreationTimestamp())
+                .profileImageUrl(getMainAttachment(post))
+                .images(getAttachments(post))
                 .active(post.getActive())
-                .profileImageUrl(getMainAttachmentUrl(post))
-                .imagesUrls(getAttachments(post))
                 .postAuthorDto(toPostAuthorDto(post.getAuthor()))
                 .build();
     }
 
-    private static String getMainAttachmentUrl(final Post post) {
-//        if(!post.getAttachments().isEmpty()) {
-//            final Optional<PostAttachment> first = post.getAttachments()
-//                    .stream()
-//                    .filter(PostAttachment::isMain)
-//                    .findFirst();
-//            return first.map(PostAttachment::getUrl).orElse(null);
-//        }
+    private static PostAttachmentDto getMainAttachment(final Post post) {
+        if(Objects.nonNull(post.getAttachments()) && !post.getAttachments().isEmpty()) {
+            final Optional<PostAttachment> mainImage = post.getAttachments()
+                    .stream()
+                    .filter(PostAttachment::isMain)
+                    .findFirst();
+            if(mainImage.isPresent()) {
+                return toAttachmentDto(mainImage.get());
+            }
+        }
+        return null;
+    }
+
+    private static String getMainAttachmentUrl(final PostAttachmentDto postAttachmentDto) {
+        if(Objects.nonNull(postAttachmentDto)) {
+            return postAttachmentDto.getUrl();
+        }
         return null;
     }
 
@@ -55,11 +64,14 @@ public class PostMapper {
                 .build();
     }
 
-    private static List<String> getAttachments(final Post post) {
-//        return post.getAttachments()
-//                .stream()
-//                .map(PostAttachment::getUrl)
-//                .collect(Collectors.toList());
+    private static List<PostAttachmentDto> getAttachments(final Post post) {
+        if(Objects.nonNull(post.getAttachments()) && !post.getAttachments().isEmpty()) {
+            return post.getAttachments()
+                    .stream()
+                    .filter(postAttachment->!postAttachment.isMain())
+                    .map(PostMapper::toAttachmentDto)
+                    .collect(Collectors.toList());
+        }
         return new ArrayList<>();
     }
 
@@ -71,18 +83,20 @@ public class PostMapper {
                 .endPoint(form.getEndPoint())
                 .participants(form.getParticipants())
                 .active(form.getActive())
-                .activeFrom(form.getActiveFrom() != null ? LocalDate.parse(form.getActiveFrom()) : null)
-                .activeTo(form.getActiveTo() != null ? LocalDate.parse(form.getActiveTo()) : null)
+                .activeFrom(Objects.nonNull(form.getActiveFrom()) ? LocalDate.parse(form.getActiveFrom()) : null)
+                .activeTo(Objects.nonNull(LocalDate.parse(form.getActiveTo())) ? LocalDate.parse(form.getActiveTo()) : null)
                 .type(form.getType())
                 .creationTimestamp(LocalDateTime.now())
                 .build();
     }
 
     public static PostListDto toListDto(final Post post) {
+        final PostAttachmentDto mainAttachmentUrl = getMainAttachment(post);
         return PostListDto.builder()
                 .uuid(post.getUuid())
                 .title(post.getTitle())
-                .mainImageUrl(null)
+                .type(post.getType())
+                .mainImageUrl(getMainAttachmentUrl(mainAttachmentUrl))
                 .description(post.getDescription())
                 .build();
     }

@@ -40,7 +40,9 @@ public class PostController {
                                           @RequestParam(required = false) final Integer participants,
                                           @RequestParam(required = false) final String startPoint,
                                           @RequestParam(required = false) final String endPoint,
-                                          @RequestParam(required = false) final UUID author){
+                                          @RequestParam(required = false) final UUID author,
+                                          @RequestParam(required = false) final UUID notAuthor,
+                                          @RequestParam(required = false) final String type){
         final PostFilterForm filterForm = PostFilterForm.builder()
                 .startDate(startDate)
                 .endDate(endDate)
@@ -49,6 +51,8 @@ public class PostController {
                 .startPoint(startPoint)
                 .endPoint(endPoint)
                 .author(author)
+                .notAuthor(notAuthor)
+                .type(type)
                 .build();
         return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page-1,size), filterForm));
     }
@@ -82,8 +86,8 @@ public class PostController {
     }
 
     @RequestMapping(value="/{uuid}/attachmentDelete", method = RequestMethod.PUT)
-    public ResponseEntity<?> deleteAttachment(@PathVariable("uuid") UUID postUuid, @RequestParam UUID attachmentUuid) {
-        postFacade.deleteAttachment(attachmentUuid);
+    public ResponseEntity<?> deleteAttachment(final @PathVariable("uuid") UUID postUuid, @RequestParam UUID attachmentUuid) {
+        postFacade.deleteAttachment(postUuid, attachmentUuid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

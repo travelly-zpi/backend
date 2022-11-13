@@ -39,6 +39,12 @@ public class SpecificationUtils {
         }
     }
 
+    public static void addNotAuthorPredicate(final CriteriaBuilder criteriaBuilder, final UUID value, final Path<String> path, final List<Predicate> predicateList) {
+        if (Objects.nonNull(value)) {
+            predicateList.add(criteriaBuilder.notEqual(path,value));
+        }
+    }
+
     public static void addStatusPredicate(final CriteriaBuilder criteriaBuilder, final Boolean status, final Path<String> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(status)) {
             predicateList.add(criteriaBuilder.equal(path, status));

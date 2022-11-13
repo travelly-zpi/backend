@@ -18,4 +18,5 @@ public class PostListDto {
     private String title;
     private String description;
     private String mainImageUrl;
+    private String type;
 }

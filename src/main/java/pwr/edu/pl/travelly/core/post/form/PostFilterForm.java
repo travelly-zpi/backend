@@ -20,8 +20,10 @@ public class PostFilterForm {
     private String startDate;
     private String endDate;
     private Boolean active;
+    private String type;
     private Integer participants;
     private String startPoint;
     private String endPoint;
     private UUID author;
+    private UUID notAuthor;
 }
