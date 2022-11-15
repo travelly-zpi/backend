@@ -18,8 +18,8 @@ public class SpecificationUtils {
                                           final List<Predicate> predicateList) {
 
         if(Objects.nonNull(beginDate) && Objects.nonNull(endDate)){
-            predicateList.add(criteriaBuilder.lessThanOrEqualTo(pathBeginDate, endDate ));
-            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathEndDate, beginDate ));
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathBeginDate, beginDate ));
+            predicateList.add(criteriaBuilder.lessThanOrEqualTo(pathEndDate, endDate ));
         }else if(Objects.nonNull(beginDate)){
             predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathBeginDate, beginDate ));
         }else if(Objects.nonNull(endDate)){
@@ -27,9 +27,9 @@ public class SpecificationUtils {
         }
     }
 
-    public static void isEqualParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<String> path, final List<Predicate> predicateList) {
+    public static void isGreaterParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<Integer> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(value)) {
-            predicateList.add(criteriaBuilder.equal(path,value));
+            predicateList.add(criteriaBuilder.greaterThan(path,value));
         }
     }
 

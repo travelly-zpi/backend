@@ -24,7 +24,7 @@ public class PostSpecification implements Specification<Post> {
     public Predicate toPredicate(final Root<Post> root, final CriteriaQuery<?> query, final CriteriaBuilder criteriaBuilder) {
         final List<Predicate> predicateList = new ArrayList<>();
 
-
+        SpecificationUtils.isLike(criteriaBuilder, filterForm.getTitle(), root.get(Post.Fields.title), predicateList);
         SpecificationUtils.isLike(criteriaBuilder, filterForm.getStartPoint(), root.get(Post.Fields.startPoint), predicateList);
         SpecificationUtils.isLike(criteriaBuilder, filterForm.getEndPoint(), root.get(Post.Fields.endPoint), predicateList);
         SpecificationUtils.isLike(criteriaBuilder, filterForm.getType(), root.get(Post.Fields.type), predicateList);
@@ -33,7 +33,7 @@ public class PostSpecification implements Specification<Post> {
         final LocalDate end = Objects.isNull(filterForm.getEndDate()) ? null : LocalDate.parse(filterForm.getEndDate());
         SpecificationUtils.addFromToPredicate(criteriaBuilder, begin, end, root.get(Post.Fields.activeFrom), root.get(Post.Fields.activeTo) , predicateList);
 
-        SpecificationUtils.isEqualParticipants(criteriaBuilder, filterForm.getParticipants(), root.get(Post.Fields.participants), predicateList);
+        SpecificationUtils.isGreaterParticipants(criteriaBuilder, filterForm.getParticipants(), root.get(Post.Fields.participants), predicateList);
         SpecificationUtils.addStatusPredicate(criteriaBuilder, filterForm.getActive(), root.get(Post.Fields.active), predicateList);
         SpecificationUtils.addAuthorPredicate(criteriaBuilder, filterForm.getAuthor(), root.get(Post.Fields.author).get("uuid"), predicateList);
         SpecificationUtils.addNotAuthorPredicate(criteriaBuilder, filterForm.getNotAuthor(), root.get(Post.Fields.author).get("uuid"), predicateList);

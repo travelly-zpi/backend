@@ -2,6 +2,7 @@ package pwr.edu.pl.travelly.api.controllers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,6 +35,7 @@ public class PostController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> findAllPosts(@RequestParam final int page,
                                           @RequestParam final int size,
+                                          @RequestParam(required = false) final String query,
                                           @RequestParam(required = false) final String startDate,
                                           @RequestParam(required = false) final String endDate,
                                           @RequestParam(required = false) final Boolean active,
@@ -44,6 +46,7 @@ public class PostController {
                                           @RequestParam(required = false) final UUID notAuthor,
                                           @RequestParam(required = false) final String type){
         final PostFilterForm filterForm = PostFilterForm.builder()
+                .title(query)
                 .startDate(startDate)
                 .endDate(endDate)
                 .active(active)
@@ -54,7 +57,7 @@ public class PostController {
                 .notAuthor(notAuthor)
                 .type(type)
                 .build();
-        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page-1,size), filterForm));
+        return ResponseEntity.ok(postFacade.findAll(PageRequest.of(page-1,size, Sort.by("creationTimestamp").descending()), filterForm));
     }
 
     @RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
