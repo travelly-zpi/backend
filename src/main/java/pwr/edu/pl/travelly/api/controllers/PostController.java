@@ -36,8 +36,8 @@ public class PostController {
     public ResponseEntity<?> findAllPosts(@RequestParam final int page,
                                           @RequestParam final int size,
                                           @RequestParam(required = false) final String query,
-                                          @RequestParam(required = false) final String startDate,
-                                          @RequestParam(required = false) final String endDate,
+                                          @RequestParam(required = false) final String activeFrom,
+                                          @RequestParam(required = false) final String activeTo,
                                           @RequestParam(required = false) final Boolean active,
                                           @RequestParam(required = false) final Integer participants,
                                           @RequestParam(required = false) final String startPoint,
@@ -47,8 +47,8 @@ public class PostController {
                                           @RequestParam(required = false) final String type){
         final PostFilterForm filterForm = PostFilterForm.builder()
                 .title(query)
-                .startDate(startDate)
-                .endDate(endDate)
+                .startDate(activeFrom)
+                .endDate(activeTo)
                 .active(active)
                 .participants(participants)
                 .startPoint(startPoint)
