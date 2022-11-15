@@ -29,7 +29,7 @@ public class SpecificationUtils {
 
     public static void isGreaterParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<Integer> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(value)) {
-            predicateList.add(criteriaBuilder.greaterThan(path,value));
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(path,value));
         }
     }
 
