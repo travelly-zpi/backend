@@ -20,6 +20,7 @@ import pwr.edu.pl.travelly.persistence.user.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -128,8 +129,8 @@ public class PostAdapter implements PostPort {
         post.setStartPoint(savePostForm.getStartPoint());
         post.setEndPoint(savePostForm.getEndPoint());
         post.setParticipants(savePostForm.getParticipants());
-        post.setActiveFrom(LocalDate.parse(savePostForm.getActiveFrom()));
-        post.setActiveTo(LocalDate.parse(savePostForm.getActiveTo()));
+        post.setActiveFrom(Objects.nonNull(savePostForm.getActiveFrom()) ? LocalDate.parse(savePostForm.getActiveFrom()) : null);
+        post.setActiveTo(Objects.nonNull(savePostForm.getActiveTo()) ? LocalDate.parse(savePostForm.getActiveTo()) : null);
         post.setType(savePostForm.getType());
     }
 }
