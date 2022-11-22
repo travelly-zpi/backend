@@ -38,6 +38,7 @@ public class PostController {
                                           @RequestParam(required = false) final String query,
                                           @RequestParam(required = false) final String activeFrom,
                                           @RequestParam(required = false) final String activeTo,
+                                          @RequestParam(required = false) final String date,
                                           @RequestParam(required = false) final Boolean active,
                                           @RequestParam(required = false) final Integer participants,
                                           @RequestParam(required = false) final String startPoint,
@@ -49,6 +50,7 @@ public class PostController {
                 .title(query)
                 .startDate(activeFrom)
                 .endDate(activeTo)
+                .date(date)
                 .active(active)
                 .participants(participants)
                 .startPoint(startPoint)
