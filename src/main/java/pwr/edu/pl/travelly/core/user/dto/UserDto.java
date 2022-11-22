@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -26,6 +27,7 @@ public class UserDto {
     private String languages;
     private String description;
     private String imageUrl;
+    private OffsetDateTime imageCreationDate;
     @JsonIgnore
     private String role;
     private String localisation;
