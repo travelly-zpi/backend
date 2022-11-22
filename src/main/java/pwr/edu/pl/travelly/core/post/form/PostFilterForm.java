@@ -19,6 +19,7 @@ public class PostFilterForm {
     private int size;
     private String title;
     private String startDate;
+    private String date;
     private String endDate;
     private Boolean active;
     private String type;

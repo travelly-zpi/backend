@@ -27,6 +27,15 @@ public class SpecificationUtils {
         }
     }
 
+    public static void addDatePredicate(final CriteriaBuilder criteriaBuilder,
+                                          final LocalDate date,
+                                          final Path<LocalDate> path,
+                                          final List<Predicate> predicateList) {
+        if(Objects.nonNull(date)){
+            predicateList.add(criteriaBuilder.equal(path, date));
+        }
+    }
+
     public static void isGreaterParticipants(final CriteriaBuilder criteriaBuilder, final Integer value, final Path<Integer> path, final List<Predicate> predicateList) {
         if (Objects.nonNull(value)) {
             predicateList.add(criteriaBuilder.greaterThanOrEqualTo(path,value));

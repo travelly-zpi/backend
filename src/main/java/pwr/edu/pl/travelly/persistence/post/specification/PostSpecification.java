@@ -33,6 +33,9 @@ public class PostSpecification implements Specification<Post> {
         final LocalDate end = Objects.isNull(filterForm.getEndDate()) ? null : LocalDate.parse(filterForm.getEndDate());
         SpecificationUtils.addFromToPredicate(criteriaBuilder, begin, end, root.get(Post.Fields.activeFrom), root.get(Post.Fields.activeTo) , predicateList);
 
+        final LocalDate date = Objects.isNull(filterForm.getDate()) ? null : LocalDate.parse(filterForm.getDate());
+        SpecificationUtils.addDatePredicate(criteriaBuilder, date, root.get(Post.Fields.activeFrom), predicateList);
+
         SpecificationUtils.isGreaterParticipants(criteriaBuilder, filterForm.getParticipants(), root.get(Post.Fields.participants), predicateList);
         SpecificationUtils.addStatusPredicate(criteriaBuilder, filterForm.getActive(), root.get(Post.Fields.active), predicateList);
         SpecificationUtils.addAuthorPredicate(criteriaBuilder, filterForm.getAuthor(), root.get(Post.Fields.author).get("uuid"), predicateList);
