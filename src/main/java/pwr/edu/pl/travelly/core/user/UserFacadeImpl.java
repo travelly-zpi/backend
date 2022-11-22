@@ -140,15 +140,12 @@ public class UserFacadeImpl implements UserFacade, UserDetailsService{
     @Override
     public UserDto findByUuid(final UUID uuid) {
         final UserDto user = userPort.findByUuid(uuid);
-        if(profileImageForUserExists(user)) {
+        final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+        if(profileImageBlobClient.exists()) {
             user.setImageUrl(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
+            user.setImageCreationDate(profileImageBlobClient.getProperties().getCreationTime());
         }
         return user;
-    }
-
-    private Boolean profileImageForUserExists(final UserDto user) {
-        final BlobClient profileImageBlobClient = containerClient.getBlobClient(PROFILE_IMAGE_PREFIX+user.getUuid().toString());
-        return profileImageBlobClient.exists();
     }
 
     @Override
