@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface ChatPort {
     Chat findByUUID(final UUID uuid);
+    UUID findOrCreateChat(UUID sender, UUID recipient);
     ChatMessage findMessageByUUID(UUID uuid);
     List<ChatDto> findAllByUserUUID(final UUID userUuid);
     List<ChatMessage> findChatMessages(final Chat chat);

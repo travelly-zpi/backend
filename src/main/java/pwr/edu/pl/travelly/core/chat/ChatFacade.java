@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ChatFacade {
-    Chat findByUUID(UUID uuid, boolean updateStatus);
+    UUID findOrCreateChat(UUID sender, UUID recipient);
     List<ChatMessage> findChatMessages(UUID uuid, boolean updateStatus);
     ChatMessage findMessageByUUID(UUID uuid);
     List<ChatDto> findAllByUserUUID(final UUID userUuid);

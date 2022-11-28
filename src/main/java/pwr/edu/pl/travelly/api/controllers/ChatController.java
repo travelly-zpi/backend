@@ -35,11 +35,16 @@ public class ChatController {
     }
 
     @GetMapping("/chat")
-    public ResponseEntity<?> findUsersChats(@RequestParam final UUID userUuid) {
-        return ResponseEntity.ok(chatFacade.findAllByUserUUID(userUuid));
+    public ResponseEntity<?> findOrCreateChats(@RequestParam final UUID sender, @RequestParam final UUID recipient) {
+        return ResponseEntity.ok(chatFacade.findOrCreateChat(sender, recipient));
     }
 
     @GetMapping("/chat/{uuid}")
+    public ResponseEntity<?> findUsersChats(@PathVariable final UUID uuid) {
+        return ResponseEntity.ok(chatFacade.findAllByUserUUID(uuid));
+    }
+
+    @GetMapping("/chat/{uuid}/messages")
     public ResponseEntity<?> findChatMessages(@PathVariable final UUID uuid,
                                       @RequestParam(required = false, defaultValue = "false") final boolean updateStatus) {
         return ResponseEntity.ok(chatFacade.findChatMessages(uuid, updateStatus));

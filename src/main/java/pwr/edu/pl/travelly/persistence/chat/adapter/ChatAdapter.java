@@ -34,6 +34,18 @@ public class ChatAdapter implements ChatPort {
     }
 
     @Override
+    public UUID findOrCreateChat(UUID sender, UUID recipient) {
+        if (chatRepository.existsChatByUser1AndUser2(sender, recipient)) {
+            return chatRepository.findChatByUser1AndUser2(sender, recipient).getUuid();
+        }
+        if (chatRepository.existsChatByUser1AndUser2(recipient, sender)) {
+            return chatRepository.findChatByUser1AndUser2(recipient, sender).getUuid();
+        }
+        Chat chat = startChat(sender.toString(), recipient.toString());
+        return chat.getUuid();
+    }
+
+    @Override
     public ChatMessage findMessageByUUID(UUID uuid) {
         ChatMessage message = messageRepository.findByUuid(uuid)
                 .orElseThrow(() ->  new NotFoundException("MESSAGE_NOT_FOUND"));
@@ -65,7 +77,7 @@ public class ChatAdapter implements ChatPort {
     public ChatMessage save(final ChatMessageDto message) {
         Chat chat = message.getChatId() == null ? null : findByUUID(UUID.fromString(message.getChatId()));
         if (chat == null) {
-            chat = startChat(message);
+            chat = startChat(message.getSenderId(), message.getRecipientId());
         }
         ChatMessage saveMsg = toMessage(message);
         saveMsg.setUuid(UUID.randomUUID());
@@ -84,14 +96,15 @@ public class ChatAdapter implements ChatPort {
         messageRepository.save(message);
     }
 
-    private Chat startChat(final ChatMessageDto msgDto) {
+    private Chat startChat(final String senderId, final String recipientId) {
         Chat chat = Chat.builder()
                 .uuid(UUID.randomUUID())
-                .user1(UUID.fromString(msgDto.getSenderId()))
-                .user2(UUID.fromString(msgDto.getRecipientId()))
+                .user1(UUID.fromString(senderId))
+                .user2(UUID.fromString(recipientId))
                 .build();
         return chatRepository.save(chat);
     }
+
     public ChatMessage toMessage(ChatMessageDto msgDto) {
         return ChatMessage.builder()
                 .senderId(UUID.fromString(msgDto.getSenderId()))
@@ -102,24 +115,24 @@ public class ChatAdapter implements ChatPort {
     }
 
     public ChatDto toDto(Chat chat) {
-        long newMsgs = messageRepository.countByChatAndRecipientIdAndStatus(chat,
+        long newMessages = messageRepository.countByChatAndRecipientIdAndStatus(chat,
                 chat.getUser1(), "RECEIVED");
         return ChatDto.builder()
                 .uuid(chat.getUuid())
-                .user1(chat.getUser1())
-                .user2(chat.getUser2())
-                .newMessages((int) newMsgs)
+                .userUuid(chat.getUser1())
+                .recipientUuid(chat.getUser2())
+                .newMessages((int) newMessages)
                 .build();
     }
 
     public ChatDto toDtoSwitchUsers(Chat chat) {
-        long newMsgs = messageRepository.countByChatAndRecipientIdAndStatus(chat,
+        long newMessages = messageRepository.countByChatAndRecipientIdAndStatus(chat,
                 chat.getUser2(), "RECEIVED");
         return ChatDto.builder()
                 .uuid(chat.getUuid())
-                .user1(chat.getUser2())
-                .user2(chat.getUser1())
-                .newMessages((int) newMsgs)
+                .userUuid(chat.getUser2())
+                .recipientUuid(chat.getUser1())
+                .newMessages((int) newMessages)
                 .build();
     }
 }

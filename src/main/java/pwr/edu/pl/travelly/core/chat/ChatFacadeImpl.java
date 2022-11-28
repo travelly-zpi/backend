@@ -20,10 +20,8 @@ public class ChatFacadeImpl implements ChatFacade{
     }
 
     @Override
-    public Chat findByUUID(UUID uuid, boolean updateStatus) {
-        Chat chat = chatPort.findByUUID(uuid);
-        if (updateStatus) chatPort.updateMessageStatus(chat);
-        return chat;
+    public UUID findOrCreateChat(UUID sender, UUID recipient) {
+        return chatPort.findOrCreateChat(sender, recipient);
     }
 
     @Override
@@ -51,5 +49,11 @@ public class ChatFacadeImpl implements ChatFacade{
     public ChatMessage processMessage(ChatMessageDto message) {
         // check if chat exist: if not create and pass cht id to message before save
         return  chatPort.save(message);
+    }
+
+    public Chat findByUUID(UUID uuid, boolean updateStatus) {
+        Chat chat = chatPort.findByUUID(uuid);
+        if (updateStatus) chatPort.updateMessageStatus(chat);
+        return chat;
     }
 }
