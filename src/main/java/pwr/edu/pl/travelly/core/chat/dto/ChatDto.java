@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ChatDto {
     private UUID uuid;
-    private UUID user1;
-    private UUID user2;
+    private UUID userUuid;
+    private UUID recipientUuid;
     private int newMessages;
 }
