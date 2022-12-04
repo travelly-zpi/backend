@@ -18,8 +18,8 @@ public class SpecificationUtils {
                                           final List<Predicate> predicateList) {
 
         if(Objects.nonNull(beginDate) && Objects.nonNull(endDate)){
-            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathBeginDate, beginDate ));
-            predicateList.add(criteriaBuilder.lessThanOrEqualTo(pathEndDate, endDate ));
+            predicateList.add(criteriaBuilder.lessThanOrEqualTo(pathBeginDate, beginDate ));
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathEndDate, endDate ));
         }else if(Objects.nonNull(beginDate)){
             predicateList.add(criteriaBuilder.greaterThanOrEqualTo(pathBeginDate, beginDate ));
         }else if(Objects.nonNull(endDate)){
